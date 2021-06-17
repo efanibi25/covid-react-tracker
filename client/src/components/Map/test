@@ -1,0 +1,85 @@
+
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+
+import usePlacesAutocomplete, { getDetails,getGeocode, getLatLng } from "use-places-autocomplete";
+import React , { useContext ,useState ,useEffect,Fragment,router, isValidElement}from "react";
+import useIsMounted from 'ismounted';
+import { SettingsInputAntenna } from '@material-ui/icons';
+import GoogleMapReact from 'google-map-react';
+import ScriptTag from 'react-script-tag';
+import {dataContext} from './Places.js'
+      
+    
+
+
+const themes = {
+    light: {
+      foreground: "#000000",
+      background: "#eeeeee"
+    },
+    dark: {
+      foreground: "#ffffff",
+      background: "#222222"
+    }
+  };
+  
+  const ThemeContext = React.createContext(themes.light);
+  
+  function App() {
+    return (
+      <ThemeContext.Provider value={themes.dark}>
+        <Toolbar />
+      </ThemeContext.Provider>
+    );
+  }
+  
+  function Toolbar(props) {
+    return (
+      <div>
+        <ThemedButton />
+      </div>
+    );
+  }
+  
+  function ThemedButton() {
+    const theme = useContext(ThemeContext);
+    return (
+      <button style={{ background: theme.background, color: theme.foreground }}>
+        I am styled by theme context!
+      </button>
+    );
+  }
+
+  ////other file
+
+
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+
+import usePlacesAutocomplete, { getDetails,getGeocode, getLatLng } from "use-places-autocomplete";
+import React , { useContext ,useState ,useEffect,Fragment,router, isValidElement}from "react";
+import useIsMounted from 'ismounted';
+import { SettingsInputAntenna } from '@material-ui/icons';
+import GoogleMapReact from 'google-map-react';
+import ScriptTag from 'react-script-tag';
+
+      
+const themes = {
+  light: {
+    foreground: "#000000",
+    background: "#eeeeee"
+  },
+  dark: {
+    foreground: "#ffffff",
+    background: "#222222"
+  }
+};
+
+export const ThemeContext = React.createContext(themes.light);
+function App() {
+  return (
+    <ThemeContext.Provider value={themes.dark}>
+    </ThemeContext.Provider>
+  );
+}
