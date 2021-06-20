@@ -14,7 +14,7 @@ import { getSyntheticTrailingComments } from 'typescript';
     
 export default function Place(props) {
      
-  let context = useContext(dataContext);
+  const context = useContext(dataContext);
      const [results, setResults] = useState([]);
       const {
         ready,
@@ -45,8 +45,23 @@ export default function Place(props) {
       function setDetails(parameter){
         getDetails(parameter)
         .then((details) => {
-          let county=details.address_components[1].long_name
-          let state=details.address_components[2].short_name
+          let state=""
+          let county=""
+          for(let i=0;i<details.address_components.length;i++){
+           let temp=details.address_components[i].short_name
+           let temp2=details.address_components[i].long_name
+           if(temp.length==2&&temp!="US"){
+             state=temp
+           }
+           if(temp2.includes('County')){
+             county=temp2
+           }
+           else if(temp2=="New York" && !county.includes("County")){
+             county=`${temp2} County`
+           }
+  
+          }
+          //Fix for new york
           context.setAddress({"state":state,"county":county})
         })
         .catch((error) => {
@@ -83,11 +98,7 @@ export default function Place(props) {
         };
         setDetails(parameter)
         setMap(parameter)
-       
-       
-    
-    
-       
+  
     
     
       }
@@ -96,7 +107,7 @@ export default function Place(props) {
       
       return (
         <Autocomplete
-        style={{backgroundColor:"White"}}
+        style={props.style}
         onInputChange={handleInput}
         onChange={handleChange}
           options={results}

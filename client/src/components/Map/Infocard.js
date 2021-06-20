@@ -34,7 +34,8 @@ export default function Infocard(props) {
   const [stateData, setstateData] = useState([]);
   const [county_pop, setCountyPop] = useState([]);
   const [state_pop, setStatePop] = useState([]);
-
+  const [countyvacc, setCountyVacc] = useState([]);
+  const [statevacc, setStateVacc] = useState([]);
   
 
   const context = useContext(dataContext);
@@ -79,7 +80,10 @@ export default function Infocard(props) {
   async function getcasesCounty(state,county){
     setcountyCases([])
     let cases_resp=await fetch(`/county_cases?start=${yesterday}&end=${today}&state=${state}&county=${county}`)
-    if (cases_resp.status !== 200) throw Error(cases_resp.message);
+    if (cases_resp.status !== 200){
+    setcountyCases(countyCases=>[...countyCases,<div><b style={{fontSize:"15px"}}>{"Error Retriving Case and Death Data for County:"}</b></div>])
+
+    } 
     let cases_dict = await cases_resp.json()
     if(cases_dict.length==0){
       setcountyCases(stateData=>[...stateData,<div><b style={{fontSize:"15px"}}>{"No Data on Cases Found"}</b></div>])
@@ -95,10 +99,17 @@ export default function Infocard(props) {
 
   }
 
+
+
+
   async function getdeathsCounty(state,county){
     setcountyDeaths([])     
     let death_resp=await fetch(`/county_deaths?start=${yesterday}&end=${today}&state=${state}&county=${county}`)
-    if (death_resp.status !== 200) throw Error(death_resp.message);
+    if (death_resp.status !== 200){
+      setcountyDeaths(countyCases=>[...countyCases,<div><b style={{fontSize:"15px"}}>{"Error Retriving Case and Death Data:"}</b></div>])
+      return 
+    }
+
     let death_dict = await death_resp.json()
     if(death_dict.length==0){
       setcountyDeaths(stateData=>[...stateData,<div><b style={{fontSize:"15px"}}>{"No Data on Deaths Found"}</b></div>])
@@ -118,9 +129,12 @@ export default function Infocard(props) {
   async function getstatedata(state){
     setstateData([])
     let state_resp=await fetch(`/state_data?start=${today}&state=${state}`)
-    if (state_resp.status !== 200) throw Error(state_resp.message);
+    if (state_resp.status !== 200){
+    setstateData(stateData=>[...stateData,<div><b style={{fontSize:"15px"}}>{"Error Retiving State Data"}</b></div>])
+
+    }
     let state_dict = await state_resp.json()
-    if(state_dict.length==0){
+    if(Object.keys(state_dict).length==0){
       setstateData(stateData=>[...stateData,<div><b style={{fontSize:"15px"}}>{"No Data Found"}</b></div>])
       return 
     }
@@ -143,9 +157,10 @@ export default function Infocard(props) {
 
   async function getCountyPop(state,county){
     setCountyPop("")
-    console.log(`/county_pop?&state=${state}&county=${county}`)
     let pop_resp=await fetch(`/county_pop?&state=${state}&county=${county}`)
-    if (pop_resp.status !== 200) throw Error(pop_resp.message);
+    if (pop_resp.status !== 200){
+      setCountyPop("Error Getting Data")
+    }
     let pop = await pop_resp.json()
     if(pop.length==0){
       setCountyPop("No Data on Pop Found")
@@ -154,6 +169,42 @@ export default function Infocard(props) {
     setCountyPop(pop[0])
 
 
+  }
+
+  async function getCountyVacc(county,state){
+    setCountyVacc("")
+    let county_resp=await fetch(`/county_vacc?county=${county}&state=${state}&today`)
+    if (county_resp.status!== 200){
+      setCountyVacc("Error Getting Data")
+      return
+    } 
+    let county_vacc = await county_resp.json()
+    if(county_vacc.length==0 || county_vacc[0]['error']){
+      setCountyVacc("No Data on Vaccines Found")
+      return 
+    }
+    setCountyVacc(county_vacc[0]["count"])
+  }
+
+
+  async function getStateVacc(state){
+    setStateVacc("")
+    console.log(`/state_vacc?state=${state}`)
+    let state_resp=await fetch(`/state_vacc?state=${state}&today`)
+    if (state_resp.status!== 200){
+      setStateVacc("Error Getting Data")
+      return
+    } 
+    let state_vacc = await state_resp.json()
+    if(state_vacc.length==0|| state_vacc[0]['error']){
+      setStateVacc("No Data on Vaccinations Found")
+      return 
+    }
+    let count=0
+    for(let i=0;i<state_vacc.length;i++){
+    count=count+state_vacc[i]["count"]
+    }
+    setStateVacc(count)
   }
   useEffect(() => {
     if (context.address["state"]==null || context.address["county"]==null){
@@ -167,6 +218,8 @@ export default function Infocard(props) {
       getcasesCounty(state,county)
       getCountyPop(state,county)
       getstatedata(state)
+      getCountyVacc(county,state)
+      getStateVacc(state)
   }, [context.address])
 
 
@@ -201,6 +254,8 @@ export default function Infocard(props) {
 
         ))}
         <br></br>
+        {<div><b style={{fontSize:"15px"}}>County Vaccinations</b>:{countyvacc}</div>}
+        <br></br>
         <u><b style={{fontSize:"15px"}}>{context.address["state"]}</b></u>
         {stateData.map((val,index) => (
          <div key={index}> 
@@ -208,6 +263,8 @@ export default function Infocard(props) {
          </div>
 
         ))}
+      {<div><b style={{fontSize:"15px"}}>State Vaccinations</b>:{statevacc}</div>}
+
 
 </div>
 

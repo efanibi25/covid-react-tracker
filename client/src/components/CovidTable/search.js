@@ -45,8 +45,22 @@ export default function Search(props) {
       function setDetails(parameter){
         getDetails(parameter)
         .then((details) => {
-          let county=details.address_components[1].long_name
-          let state=details.address_components[2].short_name
+          let state=""
+          let county=""
+          for(let i=0;i<details.address_components.length;i++){
+           let temp=details.address_components[i].short_name
+           let temp2=details.address_components[i].long_name
+           if(temp.length==2&&temp!="US"){
+             state=temp
+           }
+           if(temp2.includes('County')){
+             county=temp2
+           }
+           else if(temp2=="New York" && !county.includes("County")){
+             county=`${temp2} County`
+           }
+  
+          }
           context.setAddress({"state":state,"county":county})
         })
         .catch((error) => {

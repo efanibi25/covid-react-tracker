@@ -36,6 +36,9 @@ export default function CovidTable(props) {
   const [statedata, setStateData] = useState([])
   const [county_pop, setCountyPop] = useState([]);
   const [state_pop, setStatePop] = useState([]);
+  const [statevacc, setStateVacc] = useState([]);
+  const [countyvacc, setCountyVacc] = useState([]);
+
   //useref
   const [table,_setTable] = useState(false);
   const tableRef = useRef(table)
@@ -51,25 +54,38 @@ export default function CovidTable(props) {
     _setButton_text(data);
   };
 
-  function createData(date, deaths, deathsone, cases, casesone) {
-    return { date, deaths, deathsone, cases, casesone};
+  function createData(date, deaths, deathsone, cases, casesone,vaccine) {
+    return { date, deaths, deathsone, cases, casesone,vaccine};
   }
 
   async function create_table(state,county){
+    let deaths_dict=[]
+    let state_dict=[]
+    let cases_dict=[]
+
+
     let cases_resp=await fetch(`/county_cases?state=${state}&county=${county}`)
-    if (cases_resp.status !== 200) throw Error(cases_resp.message);
-    let cases_dict = await cases_resp.json()
-
     let deaths_resp=await fetch(`/county_deaths?state=${state}&county=${county}`)
-    if (deaths_resp.status !== 200) throw Error(deaths_resp.message);
-    let deaths_dict = await deaths_resp.json()
-
     let state_resp=await fetch(`/state_data?state=${state}&date=all`)
-    if (state_resp.status !== 200) throw Error(state_resp.message);
-    let state_dict = await state_resp.json()
+    if (cases_resp.status == 200){
+
+      cases_dict = await cases_resp.json()
+    } 
+
+    if (deaths_resp.status == 200) {
+      deaths_dict = await deaths_resp.json()
+    }
+ 
+    if (state_resp.status == 200){
+
+      state_dict = await state_resp.json()
+    } 
+
+  
 
     let temp=[]
     for(let i=0;i<deaths_dict.length;i++){
+        
         let t=createData(deaths_dict[i]["date"],deaths_dict[i]["deaths"],deaths_dict[i]["newdeaths"],cases_dict[i]["cases"],cases_dict[i]["newcases"])
         temp.push(t)
     }
@@ -84,6 +100,7 @@ export default function CovidTable(props) {
         temp2.push(t)
         
     }
+
     setStateData(temp2)
     setTable("county")
 
@@ -91,7 +108,6 @@ export default function CovidTable(props) {
 
   async function getCountyPop(state,county){
     setCountyPop("")
-    console.log(`/county_pop?&state=${state}&county=${county}`)
     let pop_resp=await fetch(`/county_pop?&state=${state}&county=${county}`)
     if (pop_resp.status !== 200) throw Error(pop_resp.message);
     let pop = await pop_resp.json()
@@ -102,6 +118,33 @@ export default function CovidTable(props) {
     setCountyPop(pop[0])
 
   }
+
+  async function getCountyVacc(state,county){
+    setCountyVacc("")
+    let countyvacc_dict=[]
+    let countyvacc_resp=await fetch(`/county_vacc?county=${county}&state=${state}&today`)
+    if (countyvacc_resp.status == 200){
+      countyvacc_dict = await countyvacc_resp.json()
+    } 
+
+    setCountyVacc(countyvacc_dict[0]["count"]||"No Data")
+  }
+
+  async function getStateVacc(state){
+    let statevacc_dict=[]
+    setStateVacc("")
+    let statevacc_resp=await fetch(`/state_vacc?state=${state}&today`)
+    if (statevacc_resp.status == 200){
+      statevacc_dict = await statevacc_resp.json()
+    } 
+    let count=0
+    for(let i=0;i<statevacc_dict.length;i++){
+      count=count+statevacc_dict[i]["count"]
+      }
+      console.log(statevacc_dict,count)
+      setStateVacc(count)
+  }
+
     
   function handleclick(){
       if(tableRef.current=="state"){
@@ -122,7 +165,9 @@ export default function CovidTable(props) {
       let county=context.address["county"]
       create_table(state,county)
       getCountyPop(state,county)
-
+      getCountyVacc(state,county)
+      getStateVacc(state)
+    
   }, [context.address])
 
 
@@ -137,13 +182,14 @@ export default function CovidTable(props) {
   if(table=="county")
   {
     return (
-<div style={{display: "grid",gridTemplateColumns:"5vw 70vw auto",gridTemplateRows:"5vh 5vh auto"}}>
+<div style={{display: "grid",gridTemplateColumns:"5vw 70vw auto",gridTemplateRows:"5vh 5vh 5vh auto"}}>
 <b style={{fontSize:"40px",gridColumnStart:"2",gridRowStart:"1",margin:"auto"}}>{context.address["county"]} </b>
 <Button variant="contained" color="primary" style={{gridColumnStart:"3",gridRowStart:"1",width:"40%"}} onClick={handleclick}>
 {"Switch to State"}
 </Button>
 <b style={{fontSize:"40px",gridColumnStart:"2",gridRowStart:"2",margin:"auto"}}>County Population: {county_pop} </b>
-<TableContainer style={{gridColumnStart:"2",gridRowStart:"3",gridRowEnd:"5"}}>
+<b style={{fontSize:"40px",gridColumnStart:"2",gridRowStart:"3",margin:"auto"}}>County Fully Vaccinated: {countyvacc} </b>
+<TableContainer style={{gridColumnStart:"2",gridRowStart:"4",gridRowEnd:"6"}}>
       <Table>
         <TableHead>
           <TableRow>
@@ -176,12 +222,13 @@ export default function CovidTable(props) {
   if(table=="state")
   {
     return (
-<div style={{display: "grid",gridTemplateColumns:"5vw 70vw auto",gridTemplateRows:"5vh auto"}}>
+<div style={{display: "grid",gridTemplateColumns:"5vw 70vw auto",gridTemplateRows:"5vh 5vh auto"}}>
 <b style={{fontSize:"40px",gridColumnStart:"2",gridRowStart:"1",margin:"auto"}}>{context.address["state"]} </b>
 <Button variant="contained" color="primary" style={{gridColumnStart:"3",gridRowStart:"1",width:"40%"}} onClick={handleclick}>
 {"Switch to County"}
 </Button>
-<TableContainer style={{gridColumnStart:"2",gridRowStart:"2",gridRowEnd:"4"}}>
+<b style={{fontSize:"40px",gridColumnStart:"2",gridRowStart:"2",margin:"auto"}}>State Fully Vaccinated: {statevacc} </b>
+<TableContainer style={{gridColumnStart:"2",gridRowStart:"3",gridRowEnd:"5"}}>
       <Table>
         <TableHead>
           <TableRow>

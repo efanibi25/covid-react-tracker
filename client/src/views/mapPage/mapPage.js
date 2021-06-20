@@ -51,7 +51,7 @@ function App() {
     <RouterLink ref={ref} to="/" style={{color:"White"}}{...props}  />
   ));
   let props = {
-    style: {width: '35%',top:"10%",position: "absolute",left:"55%"} ,
+    style: {width: '35%',top:"10%",position: "absolute",left:"55%",backgroundColor:"White"} ,
     }
   return(
     <Fragment>

@@ -143,15 +143,19 @@ useEffect(() => {
           >
           <Card style={{background:"white"}}>
           <CardHeader style={{background:"#203f00"}}><b style={{color:"white",fontSize:"25px"}}>News Stories</b></CardHeader>
+          </Card>
           {items.map((value, index) => (
+             <Card style={{background:"white"}}>
             <CardBody>
                <div key={index}> 
                 #{index+1}  {value}
                 </div>
-                                 </CardBody>
+                </CardBody>
 
-       ))}
        </Card>
+       ))}
+      
+ 
 
 
 
