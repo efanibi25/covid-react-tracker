@@ -8,7 +8,7 @@ require('dotenv').config()
 let news = cache.getKey('news') || []
 let titlelist = cache.getKey('titlelist')
 
-router.get('/newsgrabber', function (req, res) {
+router.get('/api/newsgrabber', function (req, res) {
     mainNews().then(function (val) {
         sendNews(val,res)
 

@@ -64,9 +64,9 @@ export default function CovidTable(props) {
     let cases_dict=[]
 
 
-    let cases_resp=await fetch(`/county_cases?state=${state}&county=${county}`)
-    let deaths_resp=await fetch(`/county_deaths?state=${state}&county=${county}`)
-    let state_resp=await fetch(`/state_data?state=${state}&date=all`)
+    let cases_resp=await fetch(`/api/county_cases?state=${state}&county=${county}`)
+    let deaths_resp=await fetch(`/api/county_deaths?state=${state}&county=${county}`)
+    let state_resp=await fetch(`/api/state_data?state=${state}&date=all`)
     if (cases_resp.status == 200){
 
       cases_dict = await cases_resp.json()
@@ -108,7 +108,7 @@ export default function CovidTable(props) {
 
   async function getCountyPop(state,county){
     setCountyPop("")
-    let pop_resp=await fetch(`/county_pop?&state=${state}&county=${county}`)
+    let pop_resp=await fetch(`/api/county_pop?&state=${state}&county=${county}`)
     if (pop_resp.status !== 200) throw Error(pop_resp.message);
     let pop = await pop_resp.json()
     if(pop.length==0){
@@ -122,7 +122,7 @@ export default function CovidTable(props) {
   async function getCountyVacc(state,county){
     setCountyVacc("")
     let countyvacc_dict=[]
-    let countyvacc_resp=await fetch(`/county_vacc?county=${county}&state=${state}&today`)
+    let countyvacc_resp=await fetch(`/api/county_vacc?county=${county}&state=${state}&today`)
     if (countyvacc_resp.status == 200){
       countyvacc_dict = await countyvacc_resp.json()
     } 
@@ -133,7 +133,7 @@ export default function CovidTable(props) {
   async function getStateVacc(state){
     let statevacc_dict=[]
     setStateVacc("")
-    let statevacc_resp=await fetch(`/state_vacc?state=${state}&today`)
+    let statevacc_resp=await fetch(`/api/state_vacc?state=${state}&today`)
     if (statevacc_resp.status == 200){
       statevacc_dict = await statevacc_resp.json()
     } 

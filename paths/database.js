@@ -3,29 +3,31 @@ const router=express.Router()
 const fetch = require('node-fetch')
 const currentdate = new Date().toLocaleDateString('en-CA')
 const covidstart="2020-01-22"
-router.get('/county_deaths',function(req,res){
+router.get('/api/county_deaths',function(req,res){
 confirmedUSA(res,req)
 })
 
-router.get('/county_cases',function(req,res){
-  casesUSA(res,req)
-  })
 
-router.get('/county_pop',function(req,res){
+
+  router.get('/api/county_cases',function(req,res){
+    casesUSA(res,req)
+    })
+
+router.get('/api/county_pop',function(req,res){
   getPop(res,req)
   })  
 
 
-  router.get('/state_vacc',function(req,res){
+  router.get('/api/state_vacc',function(req,res){
     getStateVacc(res,req)
     })  
   
 
-  router.get('/county_vacc',function(req,res){
+  router.get('/api/county_vacc',function(req,res){
     getCountyVacc(res,req)
     })  
 
-  router.get('/state_data',function(req,res){
+  router.get('/api/state_data',function(req,res){
    
 
     stateData(req).then(function (val) {
