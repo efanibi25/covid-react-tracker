@@ -1,31 +1,20 @@
-import React, { useState ,useEffect,Fragment,router} from 'react';
-// nodejs library that concatenates classes
-import classNames from "classnames";
-// @material-ui/core components
+import React, { Fragment,useState,useEffect} from 'react';
 import { makeStyles } from "@material-ui/core/styles";
-import { Redirect } from 'react-router-dom';
-
-
+import Link from '@material-ui/core/Link';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 //Card
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
-import CardHeader from "components/Card/CardHeader.js";
+
 import { cardTitle } from "assets/jss/material-kit-react.js";
-import CardFooter from "components/Card/CardFooter.js";
+
 
 //InfiniteScroll
 import InfiniteScroll from 'react-infinite-scroll-component';
 //appbar
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import MenuBar from 'views/Components/MenuBar';
 
-//Links
-import { MemoryRouter as Router } from 'react-router';
 import { Link as RouterLink } from 'react-router-dom';
 //Dict of different style classes
 
@@ -45,7 +34,7 @@ const useStyles = makeStyles(styles);
 
 
 export default function Cards(props) {
-  document.body.style.background="#808080"
+  document.body.style.background="#ececec"
   const { ...rest } = props;
 const [items, setitems] = useState([]);
 const [allitems, setallitems] = useState([]);
@@ -54,18 +43,20 @@ const [maxEle, setMaxEle] = useState(50);
   const classes = useStyles();
   let callApi = async () => {
     let list=[]
-    console.log(allitems,"dsds")
     if(allitems.length==0){
-      const response = await fetch('/newsgrabber');
+      const response = await fetch('/api/newsgrabber');
       const body = await response.json();
+      console.log(body)
       if (response.status !== 200) throw Error(body.message);
       let sourcemax=body.length
       for (let i=0;i<sourcemax;i++){
         let title=body[i]['title'];
         let link=body[i]['link'];
-        let element=<a href={link}>{title}</a>
+        let element=
+        <Link href={link}  color="inherit">
+        {title}
+      </Link>
         list.push(element);
-        console.log(i)
        }
 
     }
@@ -100,40 +91,29 @@ useEffect(() => {
 
 
  const newsLink = React.forwardRef((props, ref) => (
-   <RouterLink ref={ref} to="/news" style={{color:"White"}}{...props}  />
+   <Link ref={ref} to="/news" style={{color:"black"}}{...props}  />
  ));
  const tablesLink = React.forwardRef((props, ref) => (
-   <RouterLink ref={ref} to="/tables" style={{color:"White"}}{...props}  />
+   <Link ref={ref} to="/tables" style={{color:"black"}}{...props}  />
  ));
  const homeLink = React.forwardRef((props, ref) => (
-   <RouterLink ref={ref} to="/" style={{color:"White"}}{...props}  />
+   <Link ref={ref} to="/" style={{color:"black"}}{...props}  />
  ));
   return (
 
     <Fragment>
-    <AppBar style={{background:"#00003f"}}>
-    <Toolbar>
-            <IconButton color="inherit" component={homeLink} to="/">
-         Home
-          </IconButton>
-          <IconButton color="inherit" component={tablesLink}>
-        Tables
-          </IconButton>
-          <IconButton color="inherit" component={newsLink}>
-        News
-          </IconButton>
-
-
-</Toolbar>
-</AppBar>
+<MenuBar/>
     <div className={classes.toolbar} />
 <div style={{ width: '70%',marginLeft:'auto',marginRight:'auto', display:"block"}}>
+<h1 style={{textAlign: "center"}}>Covid-19 News Feed </h1>
+<h3 style={{textAlign: "center"}}>Updated Daily </h3>
+
     <InfiniteScroll
     dataLength={items.length}
     initialScrollY={40}
     next={increaseMax}
     hasMore={hasMore}
-    loader={<h4>Loading....</h4>}
+    loader={<LinearProgress></LinearProgress>}
     endMessage={
     <p style={{ textAlign: 'center' }}>
     <b>No more results</b>
@@ -141,14 +121,12 @@ useEffect(() => {
     }
 
           >
-          <Card style={{background:"white"}}>
-          <CardHeader style={{background:"#203f00"}}><b style={{color:"white",fontSize:"25px"}}>News Stories</b></CardHeader>
-          </Card>
+         
           {items.map((value, index) => (
-             <Card style={{background:"white"}}>
+             <Card style={{background:"white"}} key={index}>
             <CardBody>
                <div key={index}> 
-                #{index+1}  {value}
+                 {value}
                 </div>
                 </CardBody>
 
@@ -156,16 +134,6 @@ useEffect(() => {
        ))}
       
  
-
-
-
-
-
-
-
-
-
-
 
 </InfiniteScroll>
 </div>

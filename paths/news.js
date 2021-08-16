@@ -54,7 +54,7 @@ function mainNews() {
 
 function backupNews() {
     dictkeys = ["title", "link", "published"]
-    urlbase = 'https://google-search3.p.rapidapi.com/api/v1/news/q=coronavirus&start='
+    urlbase = 'https://google-search3.p.rapidapi.com/api/v1/news/q=coronavirus&country=US&start='
     options = {
         method: 'GET',
         headers: {
@@ -73,7 +73,7 @@ function backupNews() {
 
 function backupNews2() {
     dictkeys = ["name", "url", "datePublished"]
-    urlbase = 'https://bing-news-search1.p.rapidapi.com/news/search?q=coronavirus&count=100&mkt=en-US&textFormat=Raw&safeSearch=Off&offset='
+    urlbase = 'https://bing-news-search1.p.rapidapi.com/news/search?q=coronavirus&count=100&mkt=en-US&cc=US&textFormat=Raw&safeSearch=Off&offset='
     options = {
         method: 'GET',
         headers: {

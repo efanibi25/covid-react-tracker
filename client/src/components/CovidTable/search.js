@@ -41,6 +41,12 @@ export default function Search(props) {
         setResults(data)
       },[data]);
 
+      useEffect(() => {
+        if(Object.keys(context.address).length>0){
+          context.setShow("countyTable")
+        }
+      },[context.address]);
+     
 
       function setDetails(parameter){
         getDetails(parameter)
@@ -73,6 +79,7 @@ export default function Search(props) {
      
     
       const handleInput = (e) => {
+
         setValue(e.target.value);
       }
       const handleChange = (e,val) => {
@@ -83,6 +90,8 @@ export default function Search(props) {
           placeId: val.place_id,
         };
         setDetails(parameter)
+
+       
        
        
        

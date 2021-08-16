@@ -1,27 +1,26 @@
 import React , { useContext ,useState ,useEffect,Fragment,router, isValidElement}from "react";
 import Search from 'components/CovidTable/search.js';
-import CovidTable from 'components/CovidTable/table.js';
+import StateTable from 'components/CovidTable/stateTable.js';
+import CountyTable from 'components/CovidTable/countyTable.js';
 import { makeStyles } from "@material-ui/core/styles";
-
 //appbar
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
+import MenuBar from "views/Components/MenuBar";
+//Card
+import Box from '@material-ui/core/Box';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+//Loading
 
-
-//Links
-import { Link as RouterLink } from 'react-router-dom';
 
 
 export const dataContext = React.createContext();
-
+document.body.style.background="#ececec"
 const styles =theme =>({
-  textCenter: {
-    textAlign: "center"
-  },
-   textMuted: {
-    color: "#6c757d"
+  root: {
+    width:"40%",
+    right: "50%",
+    backgroundColor:"#ececec",
+    marginRight:"2%",
   },
   toolbar: theme.mixins.toolbar,
 })
@@ -32,45 +31,85 @@ function App() {
   const classes = useStyles();
   const [address, setAddress] = useState({});
   const [location, setLocation] = useState({});
+  const [show, setShow] = useState(null);
+  const [countydata, setCountyData] = useState([])
+  const [statedata, setStateData] = useState([])
+  const [county_pop, setCountyPop] = useState(null);
+  const [state_pop, setStatePop] = useState(null);
+  const [statevacc, setStateVacc] = useState([]);
+  const [countyvacc, setCountyVacc] = useState([]);
 
 
-
-  let shared={address,setAddress,location,setLocation}
-  const newsLink = React.forwardRef((props, ref) => (
-    <RouterLink ref={ref} to="/news" style={{color:"White"}}{...props}  />
-  ));
-  const tablesLink = React.forwardRef((props, ref) => (
-    <RouterLink ref={ref} to="/tables" style={{color:"White"}}{...props}  />
-  ));
-  const homeLink = React.forwardRef((props, ref) => (
-    <RouterLink ref={ref} to="/" style={{color:"White"}}{...props}  />
-  ));
+  let shared={
+    address,setAddress,
+    location,setLocation,
+    setShow,
+    countydata,setCountyData,
+    statedata,setStateData,
+    county_pop,setCountyPop,
+    state_pop,setStatePop,
+    statevacc,setStateVacc,
+    countyvacc,setCountyVacc
+  }
   let props = {
     style: {backgroundColor:"White",width:"80%",marginBottom:"5%"} ,
     }
+    useEffect(() => {
+      console.log(show,"this variable has changed")
+    },[show]);
+  
+  if(show==null){
+    return ( 
+      <Fragment>
+        <MenuBar/>
+    <div className={classes.toolbar} />
+    <dataContext.Provider value={shared}>  
+        <Search {...props}/>    
+    </dataContext.Provider>
+    <Box  display="flex" color="text.primary" flexDirection="row" justifyContent="center">
+    <Card p={1} className={classes.root} style={{backgroundColor:"white"}}>
+   <CardContent>
+   <h4 style={{fontFamily: "Roboto"}}>How to Use?</h4>
+    Search for a city by Name
+    <br></br>
+    <br></br>
+    This will Load Vaccine, Death, and Case Data for the county, that the city resides.
+    <br></br>
+    Afterwards, you can also view state Data by Click Switch to State
+   </CardContent>
+    </Card >
+</Box>
+ 
+
+    </Fragment>
+    )
+  }
+
+  if(show=="countyTable"){
   return(
     <Fragment>
-    <AppBar style={{background:"#00003f"}}>
-    <Toolbar>
-            <IconButton color="inherit" component={homeLink} to="/">
-         Home
-          </IconButton>
-          <IconButton color="inherit" component={tablesLink}>
-        Tables
-          </IconButton>
-          <IconButton color="inherit" component={newsLink}>
-        News
-          </IconButton>
-
-
-</Toolbar>
-</AppBar>
+<MenuBar/>
     <div className={classes.toolbar} />
     <dataContext.Provider value={shared}>    
     <Search {...props}/>
-    <CovidTable/>
+    <CountyTable/>
     </dataContext.Provider>
     </Fragment>
   )
+  }
+
+  if(show=="stateTable"){
+    return(
+      <Fragment>
+  <MenuBar/>
+      <div className={classes.toolbar} />
+      <dataContext.Provider value={shared}>    
+      <Search {...props}/>
+      <StateTable/>
+      </dataContext.Provider>
+      </Fragment>
+    )
+    }
+
 }
 export default App;
