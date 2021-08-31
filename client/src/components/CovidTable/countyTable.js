@@ -4,6 +4,9 @@
 import React , { useContext ,useState ,useEffect,Fragment,router, isValidElement,useRef}from "react";
 import { dataContext } from "../../views/tablePage/tablePage.js";
 import LinearProgress from '@material-ui/core/LinearProgress';
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Hidden from '@material-ui/core/Hidden';
 //table
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -15,13 +18,24 @@ import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 
 
+const useStyles = makeStyles({
+  root:{
+  color:"white",
+  "background-color":"#442bce"
+  },
+  label: {
+    textTransform: 'capitalize',
+    height:"100%",
+    width:"100%"
+  },
+});
 
 
 
 export default function CountyTable(props) {
 
   let context = useContext(dataContext);
- 
+  const classes = useStyles();
 
   const today = new Date()
 
@@ -50,32 +64,36 @@ export default function CountyTable(props) {
     let deaths_dict=[]
     let cases_dict=[]
 
+    let url1=`/api/county_cases?state=${state}&county=${county}`
+    let url2=`/api/county_deaths?state=${state}&county=${county}`
+    // console.log(url1,url2)
 
-    let cases_resp=await fetch(`/api/county_cases?state=${state}&county=${county}`)
-    let deaths_resp=await fetch(`/api/county_deaths?state=${state}&county=${county}`)
+
+    let cases_resp=await fetch(url1)
+    let deaths_resp=await fetch(url2 )
     if (cases_resp.status == 200){
-
       cases_dict = await cases_resp.json()
     } 
 
     if (deaths_resp.status == 200) {
       deaths_dict = await deaths_resp.json()
     }
- 
+    console.log(deaths_dict,cases_dict)
   
     let temp=[]
-    for(let i=0;i<deaths_dict.length;i++){
+    for(let i=deaths_dict.length-1;i>0;i--){
         
         let t=createData(deaths_dict[i]["date"],deaths_dict[i]["deaths"],deaths_dict[i]["newdeaths"],cases_dict[i]["cases"],cases_dict[i]["newcases"])
         temp.push(t)
     }
-    console.log("what",temp)
     context.setCountyData(temp)
   }
 
   async function getCountyPop(state,county){
     context.setCountyPop("")
-    let pop_resp=await fetch(`/api/county_pop?&state=${state}&county=${county}`)
+    let url=`/api/county_pop?&state=${state}&county=${county}`
+    // console.log(url)
+    let pop_resp=await fetch(url)
     if (pop_resp.status !== 200) throw Error(pop_resp.message);
     let pop = await pop_resp.json()
     if(pop.length==0){
@@ -89,10 +107,14 @@ export default function CountyTable(props) {
   async function getCountyVacc(state,county){
     context.setCountyVacc("")
     let countyvacc_dict=[]
-    let countyvacc_resp=await fetch(`/api/county_vacc?county=${county}&state=${state}&today`)
+    let url=`/api/county_vacc?county=${county}&state=${state}&today`
+    console.log(url)
+    let countyvacc_resp=await fetch(url)
     if (countyvacc_resp.status == 200){
       countyvacc_dict = await countyvacc_resp.json()
     } 
+    // console.log(countyvacc_dict)
+  
 
     context.setCountyVacc(countyvacc_dict[0]["count"]||"No Data")
   }
@@ -114,10 +136,9 @@ export default function CountyTable(props) {
      create_table(state,county)
      getCountyVacc(state,county)  
      getCountyPop(state,county)    
-}, [])
+}, [context.address])
  
   useEffect(() => {
-    console.log(context.countydata.length)
     if(context.countydata.length>0&&context.countyvacc)
     setLoaded(true)
   },[context.countydata,context.county_pop, context.countyvacc]);
@@ -132,7 +153,6 @@ export default function CountyTable(props) {
 
 
 
-
   
 
   if(table==false) {
@@ -141,15 +161,106 @@ export default function CountyTable(props) {
     )
    
   } 
-    return (
-<div style={{display: "grid",gridTemplateColumns:"5vw 70vw auto",gridTemplateRows:"5vh 5vh 5vh auto"}}>
-<b style={{fontSize:"40px",gridColumnStart:"2",gridRowStart:"1",margin:"auto"}}>{context.address["county"]} </b>
-<Button variant="contained" color="primary" style={{gridColumnStart:"3",gridRowStart:"1",width:"40%"}} onClick={handleclick}>
-{"Switch to State"}
+  else {  
+  
+  return (
+      <Fragment>
+          <Grid container 
+         justifyContent="center"
+         justify="center"
+        container
+        direction="row"
+          >
+        
+        <Hidden smDown>
+              
+    <Grid container item   xs={4} justify='center'>
+  
+    <b style={{fontSize:"40px","marginLeft":"20%"}}>{context.address["county"]} </b>
+     
+    </Grid>
+    <Grid item>
+    <Button 
+  variant="contained" 
+  onClick={handleclick}
+  size="small"
+classes={{
+root: classes.root, // class name, e.g. `classes-nesting-root-x`
+label: classes.label, // class name, e.g. `classes-nesting-label-x`
+}}>
+Switch to State
 </Button>
-<b style={{fontSize:"40px",gridColumnStart:"2",gridRowStart:"2",margin:"auto"}}>County Population: {context.county_pop} </b>
-<b style={{fontSize:"40px",gridColumnStart:"2",gridRowStart:"3",margin:"auto"}}>County Fully Vaccinated: {context.countyvacc} </b>
-<TableContainer style={{gridColumnStart:"2",gridRowStart:"4",gridRowEnd:"6"}}>
+
+
+    </Grid>
+
+ 
+
+ 
+    <Grid container  item xs={10} justify='center'> 
+    <b style={{fontSize:"40px"}}>County Population: {context.county_pop} </b>
+
+      
+    </Grid>     
+
+    <Grid item container  xs={10} justify='center'>
+    <b style={{fontSize:"40px"}}>County Fully Vaccinated: {context.countyvacc} </b>
+
+      
+    </Grid>    
+
+      </Hidden>
+
+
+
+
+
+
+
+
+            <Hidden mdUp>
+              
+              <Grid container item   xs={4} justify='center'>
+          
+            <b style={{fontSize:"20px"}}>{context.address["county"]} </b>
+             
+            </Grid>
+            <Grid item>
+            <Button 
+          variant="contained" 
+          onClick={handleclick}
+          size="small"
+        classes={{
+       root: classes.root, // class name, e.g. `classes-nesting-root-x`
+      label: classes.label, // class name, e.g. `classes-nesting-label-x`
+    }}>
+Switch to State
+</Button>
+
+
+            </Grid>
+
+         
+  
+         
+            <Grid container  item xs={10} justify='center'> 
+            <b style={{fontSize:"20px"}}>County Population: {context.county_pop} </b>
+
+              
+            </Grid>     
+
+            <Grid item container  xs={10} justify='center'>
+            <b style={{fontSize:"20px"}}>County Fully Vaccinated: {context.countyvacc} </b>
+
+              
+            </Grid>    
+    
+              </Hidden>
+         
+
+
+            <Grid item container justify='center' xs={8}>
+            <TableContainer style={{"gridColumn":"2/2"}}>
       <Table>
         <TableHead>
           <TableRow>
@@ -175,8 +286,18 @@ export default function CountyTable(props) {
 </TableBody>
       </Table>
     </TableContainer>
-    </div>
-    )
+
+              
+            </Grid>   
+
+
+         </Grid>
+        </Fragment>
+    
+
+  )
+  }
+    
 
   
 }

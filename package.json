@@ -1,6 +1,7 @@
 {
   "name": "react-express-app",
   "version": "1.0.0",
+  "proxy": "http://localhost:5000",
   "scripts": {
     "client": "npm start --prefix client",
     "server": "node server.js",

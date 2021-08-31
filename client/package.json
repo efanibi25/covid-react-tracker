@@ -3,11 +3,11 @@
   "version": "1.9.0",
   "description": "Covid19 Tracker",
   "private": true,
-  "proxy": "http://localhost:6000",
+  "proxy": "http://localhost:5400",
   "main": "src/index.js",
   "dependencies": {
     "@fontsource/roboto": "^4.5.0",
-    "@material-ui/core": "4.10.0",
+    "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.58",
     "@reach/combobox": "^0.15.1",

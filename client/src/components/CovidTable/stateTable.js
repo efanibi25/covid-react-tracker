@@ -4,6 +4,10 @@
 import React , { useContext ,useState ,useEffect,Fragment,router, isValidElement,useRef}from "react";
 import { dataContext } from "../../views/tablePage/tablePage.js";
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import Hidden from '@material-ui/core/Hidden';
+
 //table
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,11 +15,22 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+
 //icons
 import Button from '@material-ui/core/Button';
 
-
-
+const useStyles = makeStyles({
+  root:{
+  "grid-column-start":3,
+  "grid-row-start":1,
+  width:"40%",
+  color:"white",
+  "background-color":"#442bce"
+  },
+  label: {
+    "font-size":"8px"
+  },
+});
 
 
 export default function StateTable(props) {
@@ -24,6 +39,7 @@ export default function StateTable(props) {
  
 
   const today = new Date()
+  const classes = useStyles();
 
 
   //useref
@@ -35,7 +51,7 @@ export default function StateTable(props) {
     _setTable(data);
   };
 
-  const [button_text,_setButton_text] = useState("Switch to State");
+  const [button_text,_setButton_text] = useState("Switch to County");
   const buttonRef = useRef(button_text)
   const setButton_text = data => {
     buttonRef.current = data;
@@ -60,7 +76,7 @@ export default function StateTable(props) {
     let keys=Object.keys(state_dict)
     keys=keys.sort()
     let temp=[]
-    for(let i=0;i<keys.length;i++){
+    for(let i=keys.length-1;i>-1;i--){
       let key=keys[i]
       let data=state_dict[key] 
       let t=createData(key,data["tot_death"],data["new_death"],data["tot_cases"],data["new_case"])
@@ -76,15 +92,18 @@ export default function StateTable(props) {
 
   async function getStateVacc(state){
     let statevacc_dict=[]
-    context.setStateVacc("")
-    let statevacc_resp=await fetch(`/api/state_vacc?state=${state}&today`)
+    let url=`/api/state_vacc?state=${state}&today`
+    // console.log(url)
+    let statevacc_resp=await fetch(url)
     if (statevacc_resp.status == 200){
       statevacc_dict = await statevacc_resp.json()
     } 
     let count=0
+    // console.log(statevacc_dict)
     for(let i=0;i<statevacc_dict.length;i++){
       count=count+statevacc_dict[i]["count"]
       }
+      // console.log(count)
       context.setStateVacc(count)
   }
 
@@ -109,7 +128,6 @@ export default function StateTable(props) {
   }, [])
 
   useEffect(() => {
-    console.log(context.state_pop)
     if(context.statedata.length>0&&context.statevacc)
     setLoaded(true)
   },[context.statedata,context.state_pop, context.statevacc]);
@@ -131,15 +149,97 @@ export default function StateTable(props) {
     )
    
   } 
-
-    return (
-<div style={{display: "grid",gridTemplateColumns:"5vw 70vw auto",gridTemplateRows:"5vh 5vh auto"}}>
-<b style={{fontSize:"40px",gridColumnStart:"2",gridRowStart:"1",margin:"auto"}}>{context.address["state"]} </b>
-<Button variant="contained" color="primary" style={{gridColumnStart:"3",gridRowStart:"1",width:"40%"}} onClick={handleclick}>
-{"Switch to County"}
+  else {  
+  
+  return (
+      <Fragment>
+          <Grid container 
+         justifyContent="center"
+         justify="center"
+        container
+        direction="row"
+          >
+        
+        <Hidden smDown>
+              
+              <Grid container item   xs={4} justify='center'>
+  
+    <b style={{fontSize:"40px","marginLeft":"20%"}}>{context.address["state"]} </b>
+     
+    </Grid>
+    <Grid item>
+    <Button 
+  variant="contained" 
+  onClick={handleclick}
+  size="small"
+classes={{
+root: classes.root, // class name, e.g. `classes-nesting-root-x`
+label: classes.label, // class name, e.g. `classes-nesting-label-x`
+}}>
+Switch to County
 </Button>
-<b style={{fontSize:"40px",gridColumnStart:"2",gridRowStart:"2",margin:"auto"}}>State Fully Vaccinated: {context.statevacc} </b>
-<TableContainer style={{gridColumnStart:"2",gridRowStart:"3",gridRowEnd:"5"}}>
+
+
+    </Grid>
+
+ 
+
+
+
+    <Grid item container  xs={10} justify='center'>
+    <b style={{fontSize:"40px"}}>State Fully Vaccinated: {context.statevacc} </b>
+
+      
+    </Grid>    
+
+      </Hidden>
+
+
+
+
+
+
+
+
+            <Hidden mdUp>
+              
+                      <Grid container item   xs={4} justify='center'>
+          
+            <b style={{fontSize:"20px"}}>{context.address["state"]} </b>
+             
+            </Grid>
+            <Grid item>
+            <Button 
+          variant="contained" 
+          onClick={handleclick}
+          size="small"
+        classes={{
+       root: classes.root, // class name, e.g. `classes-nesting-root-x`
+      label: classes.label, // class name, e.g. `classes-nesting-label-x`
+    }}>
+Switch to County
+</Button>
+
+
+            </Grid>
+
+         
+  
+         
+   
+
+            <Grid item container  xs={10} justify='center'>
+            <b style={{fontSize:"20px"}}>State Fully Vaccinated: {context.statevacc} </b>
+
+              
+            </Grid>    
+    
+              </Hidden>
+         
+
+
+            <Grid item container justify='center' xs={8}>
+            <TableContainer style={{"gridColumn":"2/2"}}>
       <Table>
         <TableHead>
           <TableRow>
@@ -165,11 +265,18 @@ export default function StateTable(props) {
 </TableBody>
       </Table>
     </TableContainer>
-    </div>
-    )
 
-  
+              
+            </Grid>   
+
+
+         </Grid>
+        </Fragment>
+    
+
+  )
+  }
+    
+
   
 }
-
-

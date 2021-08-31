@@ -54,9 +54,6 @@ router.get('/api/county_pop',function(req,res){
       let data=[]
       let i=1
       while(data.length==0){
-        if (date=="2021-06-13"){
-        break
-        }
         let url=null
         if(req.query.date=="all"){
           url=`https://data.cdc.gov/resource/9mfq-cb36.json?state=${state}`
@@ -133,6 +130,7 @@ function casesUSA(res,req){
   county=req.query.county||""
   startDate=req.query.start || covidstart
   endDate= req.query.end || currentdate
+  console.log(endDate)
   col.find({"County Name":`${county} `,"State":state}).project({ _id: 0 ,stateFIPS:0,countyFIPS:0}).toArray(function(err,results){
     if(err){
       console.log("Issue Getting Cases Data")
@@ -148,6 +146,8 @@ function casesUSA(res,req){
       let endex=getDateLimit(results[0],"high",endDate)
       keys=Object.keys(results[0])
       let out=[]
+      console.log(results)
+      console.log("This was the enddate",endDate)
       for(let i=startdex;i<endex+1;i++){
         let oldkey=keys[i-1]
         let currkey=keys[i]
@@ -218,7 +218,6 @@ async function getCountyVacc(res,req){
     today.setDate(today.getDate() - i)
     d=null
     if(!req.query.today){
-      console.log(county)
       d= await col4.find({"County":county,"State":state}).toArray()
       console.log(d)
     }
