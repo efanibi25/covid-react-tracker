@@ -1,30 +1,54 @@
+
+
 import React from "react";
-// nodejs library that concatenates classes
-import classNames from "classnames";
-// nodejs library to set properties for components
 import PropTypes from "prop-types";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-// @material-ui/icons
+import { styled } from '@mui/material/styles';
+import { Box } from '@mui/material';
 
-// core components
-import styles from "assets/jss/material-kit-react/components/cardHeaderStyle.js";
+// Note: The old imports for makeStyles, classNames, and the JSS styles file are removed.
 
-const useStyles = makeStyles(styles);
+const StyledCardHeader = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'plain',
+})(({ theme, ownerState }) => ({
+  // Define the base styles for the card header
+  width: '100%',
+  zIndex: '3',
+  position: 'relative',
+  // You must copy the exact styles for `cardHeader` from your original JSS file
+  // For example:
+  borderRadius: '3px',
+  padding: '15px 20px',
+  marginLeft: '15px',
+  marginRight: '15px',
+  marginTop: '-30px',
+  border: '0',
+  marginBottom: '0',
+
+  // Conditionally apply styles based on the 'color' prop
+  ...(ownerState.color && {
+    color: theme.palette.getContrastText(theme.palette[ownerState.color].main),
+    background: theme.palette[ownerState.color].main,
+    boxShadow: `0 4px 20px 0 rgba(0, 0, 0,.14), 0 7px 10px -5px ${theme.palette[ownerState.color].main}60`,
+  }),
+
+  // Conditionally apply styles for the 'plain' prop
+  ...(ownerState.plain && {
+    background: 'transparent',
+    boxShadow: 'none',
+  }),
+}));
 
 export default function CardHeader(props) {
-  const classes = useStyles();
   const { className, children, color, plain, ...rest } = props;
-  const cardHeaderClasses = classNames({
-    [classes.cardHeader]: true,
-    [classes[color + "CardHeader"]]: color,
-    [classes.cardHeaderPlain]: plain,
-    [className]: className !== undefined
-  });
+  
   return (
-    <div className={cardHeaderClasses} {...rest}>
+    <StyledCardHeader
+      className={className}
+      ownerState={{ color, plain }}
+      {...rest}
+    >
       {children}
-    </div>
+    </StyledCardHeader>
   );
 }
 

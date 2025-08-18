@@ -1,26 +1,37 @@
 import React from "react";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import { Box, styled, Tabs, Tab } from "@mui/material";
 
-// @material-ui/icons
-import Face from "@material-ui/icons/Face";
-import Chat from "@material-ui/icons/Chat";
-import Build from "@material-ui/icons/Build";
-// core components
+// @mui/icons-material
+import Face from "@mui/icons-material/Face";
+import Chat from "@mui/icons-material/Chat";
+import Build from "@mui/icons-material/Build";
+
+// core components (assuming these are already refactored)
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import CustomTabs from "components/CustomTabs/CustomTabs.js";
 
-import styles from "assets/jss/material-kit-react/views/componentsSections/tabsStyle.js";
-
-const useStyles = makeStyles(styles);
+// Note: Removed the old imports for makeStyles and the styles file.
 
 export default function SectionTabs() {
-  const classes = useStyles();
   return (
-    <div className={classes.section}>
-      <div className={classes.container}>
-        <div id="nav-tabs">
+    <Box sx={{
+      // Replicates the old `classes.section` styles
+      padding: '70px 0',
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+    }}>
+      <Box sx={{
+        // Replicates the old `classes.container` styles
+        paddingRight: '15px',
+        paddingLeft: '15px',
+        marginRight: 'auto',
+        marginLeft: 'auto',
+        width: '100%',
+        zIndex: 12,
+        color: '#FFFFFF',
+      }}>
+        <Box id="nav-tabs">
           <h3>Navigation Tabs</h3>
           <GridContainer>
             <GridItem xs={12} sm={12} md={6}>
@@ -34,7 +45,10 @@ export default function SectionTabs() {
                     tabName: "Profile",
                     tabIcon: Face,
                     tabContent: (
-                      <p className={classes.textCenter}>
+                      <Box component="p" sx={{
+                        // Replicates the old `classes.textCenter` styles
+                        textAlign: 'center',
+                      }}>
                         I think that’s a responsibility that I have, to push
                         possibilities, to show people, this is the level that
                         things could be at. So when you get something that has
@@ -43,14 +57,17 @@ export default function SectionTabs() {
                         company that ends up being worth billions of dollars,
                         because I got the answers. I understand culture. I am
                         the nucleus.
-                      </p>
+                      </Box>
                     )
                   },
                   {
                     tabName: "Messages",
                     tabIcon: Chat,
                     tabContent: (
-                      <p className={classes.textCenter}>
+                      <Box component="p" sx={{
+                        // Replicates the old `classes.textCenter` styles
+                        textAlign: 'center',
+                      }}>
                         I think that’s a responsibility that I have, to push
                         possibilities, to show people, this is the level that
                         things could be at. I will be the leader of a company
@@ -59,14 +76,17 @@ export default function SectionTabs() {
                         I think that’s a responsibility that I have, to push
                         possibilities, to show people, this is the level that
                         things could be at.
-                      </p>
+                      </Box>
                     )
                   },
                   {
                     tabName: "Settings",
                     tabIcon: Build,
                     tabContent: (
-                      <p className={classes.textCenter}>
+                      <Box component="p" sx={{
+                        // Replicates the old `classes.textCenter` styles
+                        textAlign: 'center',
+                      }}>
                         think that’s a responsibility that I have, to push
                         possibilities, to show people, this is the level that
                         things could be at. So when you get something that has
@@ -75,7 +95,7 @@ export default function SectionTabs() {
                         company that ends up being worth billions of dollars,
                         because I got the answers. I understand culture. I am
                         the nucleus.
-                      </p>
+                      </Box>
                     )
                   }
                 ]}
@@ -92,7 +112,10 @@ export default function SectionTabs() {
                   {
                     tabName: "Home",
                     tabContent: (
-                      <p className={classes.textCenter}>
+                      <Box component="p" sx={{
+                        // Replicates the old `classes.textCenter` styles
+                        textAlign: 'center',
+                      }}>
                         I think that’s a responsibility that I have, to push
                         possibilities, to show people, this is the level that
                         things could be at. So when you get something that has
@@ -101,13 +124,16 @@ export default function SectionTabs() {
                         company that ends up being worth billions of dollars,
                         because I got the answers. I understand culture. I am
                         the nucleus.
-                      </p>
+                      </Box>
                     )
                   },
                   {
                     tabName: "Updates",
                     tabContent: (
-                      <p className={classes.textCenter}>
+                      <Box component="p" sx={{
+                        // Replicates the old `classes.textCenter` styles
+                        textAlign: 'center',
+                      }}>
                         I think that’s a responsibility that I have, to push
                         possibilities, to show people, this is the level that
                         things could be at. I will be the leader of a company
@@ -116,13 +142,16 @@ export default function SectionTabs() {
                         I think that’s a responsibility that I have, to push
                         possibilities, to show people, this is the level that
                         things could be at.
-                      </p>
+                      </Box>
                     )
                   },
                   {
                     tabName: "History",
                     tabContent: (
-                      <p className={classes.textCenter}>
+                      <Box component="p" sx={{
+                        // Replicates the old `classes.textCenter` styles
+                        textAlign: 'center',
+                      }}>
                         think that’s a responsibility that I have, to push
                         possibilities, to show people, this is the level that
                         things could be at. So when you get something that has
@@ -131,15 +160,15 @@ export default function SectionTabs() {
                         company that ends up being worth billions of dollars,
                         because I got the answers. I understand culture. I am
                         the nucleus.
-                      </p>
+                      </Box>
                     )
                   }
                 ]}
               />
             </GridItem>
           </GridContainer>
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 }

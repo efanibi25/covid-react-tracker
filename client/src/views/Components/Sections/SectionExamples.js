@@ -1,11 +1,9 @@
 import React from "react";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-// @material-ui/icons
+import { Box } from "@mui/material";
 
-// core components
+// core components (assuming these are already refactored)
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import Button from "components/CustomButtons/Button.js";
@@ -13,28 +11,46 @@ import Button from "components/CustomButtons/Button.js";
 import landing from "assets/img/landing.jpg";
 import profile from "assets/img/profile.jpg";
 
-import styles from "assets/jss/material-kit-react/views/componentsSections/exampleStyle.js";
-
-const useStyles = makeStyles(styles);
+// Note: Removed the old imports for makeStyles and the styles file.
 
 export default function SectionExamples() {
-  const classes = useStyles();
   return (
-    <div className={classes.section}>
-      <div className={classes.container}>
-        <GridContainer justify="center">
+    <Box sx={{
+      // Replicates the old `classes.section` styles
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+      padding: "70px 0",
+    }}>
+      <Box sx={{
+        // Replicates the old `classes.container` styles
+        paddingRight: '15px',
+        paddingLeft: '15px',
+        marginRight: 'auto',
+        marginLeft: 'auto',
+        width: '100%',
+        zIndex: 12,
+        color: '#FFFFFF',
+      }}>
+        <GridContainer justifyContent="center">
           <GridItem xs={12} sm={12} md={6}>
-            <Link to="landing-page" className={classes.link}>
-              <img
+            <Link to="landing-page" style={{
+              // Replicates the old `classes.link` styles
+              textDecoration: 'none',
+              color: 'inherit',
+            }}>
+              <Box 
+                component="img"
                 src={landing}
                 alt="..."
-                className={
-                  classes.imgRaised +
-                  " " +
-                  classes.imgRounded +
-                  " " +
-                  classes.imgFluid
-                }
+                sx={{
+                  // Replicates the old `classes.imgRaised`, `imgRounded`, and `imgFluid` styles
+                  borderRadius: '6px',
+                  boxShadow: '0 5px 15px -8px rgba(0, 0, 0, 0.24), 0 8px 10px -5px rgba(0, 0, 0, 0.2)',
+                  maxWidth: '100%',
+                  height: 'auto',
+                  verticalAlign: 'middle',
+                  border: 0,
+                }}
               />
               <Button color="primary" size="lg" simple>
                 View landing page
@@ -42,17 +58,24 @@ export default function SectionExamples() {
             </Link>
           </GridItem>
           <GridItem xs={12} sm={12} md={6}>
-            <Link to="profile-page" className={classes.link}>
-              <img
+            <Link to="profile-page" style={{
+              // Replicates the old `classes.link` styles
+              textDecoration: 'none',
+              color: 'inherit',
+            }}>
+              <Box 
+                component="img"
                 src={profile}
                 alt="..."
-                className={
-                  classes.imgRaised +
-                  " " +
-                  classes.imgRounded +
-                  " " +
-                  classes.imgFluid
-                }
+                sx={{
+                  // Replicates the old `classes.imgRaised`, `imgRounded`, and `imgFluid` styles
+                  borderRadius: '6px',
+                  boxShadow: '0 5px 15px -8px rgba(0, 0, 0, 0.24), 0 8px 10px -5px rgba(0, 0, 0, 0.2)',
+                  maxWidth: '100%',
+                  height: 'auto',
+                  verticalAlign: 'middle',
+                  border: 0,
+                }}
               />
               <Button color="primary" size="lg" simple>
                 View profile page
@@ -60,7 +83,7 @@ export default function SectionExamples() {
             </Link>
           </GridItem>
         </GridContainer>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }

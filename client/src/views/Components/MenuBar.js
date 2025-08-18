@@ -1,9 +1,9 @@
 import React, { Fragment} from 'react';
 
 //appbar
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
 
 import { Link as RouterLink } from 'react-router-dom';
 //Dict of different style classes
@@ -23,25 +23,23 @@ export default function MenuBar(props) {
    <RouterLink ref={ref} to="/" style={{color:"white"}}{...props}  />
  ));
   return (
-
     <Fragment>
-    <AppBar style={{background:"#00003f"}}>
+      <AppBar style={{background:"#00003f"}}>
 
-    <Toolbar>
-            <IconButton color="inherit" component={homeLink} to="/">
-         Home
-          </IconButton>
-          <IconButton color="inherit" component={tablesLink}>
-       Data
-          </IconButton>
-          <IconButton color="inherit" component={newsLink}>
-        News
-          </IconButton>
+      <Toolbar>
+              <IconButton color="inherit" component={homeLink} to="/" size="large">
+           Home
+            </IconButton>
+            <IconButton color="inherit" component={tablesLink} size="large">
+         Data
+            </IconButton>
+            <IconButton color="inherit" component={newsLink} size="large">
+          News
+            </IconButton>
 
 
-</Toolbar>
-</AppBar>
-      </Fragment>
-
+  </Toolbar>
+  </AppBar>
+    </Fragment>
   );
 }

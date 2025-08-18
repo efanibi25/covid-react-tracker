@@ -1,29 +1,26 @@
 import React from "react";
 // react plugin for creating date-time-picker
 import Datetime from "react-datetime";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import Slide from "@material-ui/core/Slide";
-import IconButton from "@material-ui/core/IconButton";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import Tooltip from "@material-ui/core/Tooltip";
-import Popover from "@material-ui/core/Popover";
-// @material-ui/icons
-import LibraryBooks from "@material-ui/icons/LibraryBooks";
-import Close from "@material-ui/icons/Close";
-// core components
+import { Box } from '@mui/material';
+import Slide from "@mui/material/Slide";
+import IconButton from "@mui/material/IconButton";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import Tooltip from "@mui/material/Tooltip";
+import Popover from "@mui/material/Popover";
+// @mui/icons-material
+import LibraryBooks from "@mui/icons-material/LibraryBooks";
+import Close from "@mui/icons-material/Close";
+// core components (assuming these are already refactored)
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import Button from "components/CustomButtons/Button.js";
 
-import styles from "assets/jss/material-kit-react/views/componentsSections/javascriptStyles.js";
-
-const useStyles = makeStyles(styles);
+// Note: Removed the old imports for makeStyles and the styles file.
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -32,23 +29,49 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 Transition.displayName = "Transition";
 
 export default function SectionJavascript() {
-  const classes = useStyles();
   const [anchorElLeft, setAnchorElLeft] = React.useState(null);
   const [anchorElTop, setAnchorElTop] = React.useState(null);
   const [anchorElBottom, setAnchorElBottom] = React.useState(null);
   const [anchorElRight, setAnchorElRight] = React.useState(null);
   const [classicModal, setClassicModal] = React.useState(false);
+
   return (
-    <div className={classes.section}>
-      <div className={classes.container}>
-        <div className={classes.title}>
+    <Box sx={{
+      // Replicates the old `classes.section` styles
+      padding: '70px 0',
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+    }}>
+      <Box sx={{
+        // Replicates the old `classes.container` styles
+        paddingRight: '15px',
+        paddingLeft: '15px',
+        marginRight: 'auto',
+        marginLeft: 'auto',
+        width: '100%',
+        zIndex: 12,
+        color: '#FFFFFF',
+      }}>
+        <Box sx={{
+          // Replicates the old `classes.title` styles
+          textAlign: "center",
+          marginBottom: "30px",
+          minHeight: "32px",
+          textDecoration: "none",
+        }}>
           <h2>Javascript components</h2>
-        </div>
+        </Box>
         <GridContainer>
           <GridItem xs={12} sm={12} md={6}>
-            <div className={classes.title}>
+            <Box sx={{
+              // Replicates the old `classes.title` styles
+              textAlign: "center",
+              marginBottom: "30px",
+              minHeight: "32px",
+              textDecoration: "none",
+            }}>
               <h3>Modal</h3>
-            </div>
+            </Box>
             <GridContainer>
               <GridItem xs={12} sm={12} md={6} lg={4}>
                 <Button
@@ -56,40 +79,76 @@ export default function SectionJavascript() {
                   block
                   onClick={() => setClassicModal(true)}
                 >
-                  <LibraryBooks className={classes.icon} />
+                  <LibraryBooks sx={{ marginRight: '5px' }} />
                   Classic
                 </Button>
                 <Dialog
-                  classes={{
-                    root: classes.center,
-                    paper: classes.modal
-                  }}
                   open={classicModal}
                   TransitionComponent={Transition}
                   keepMounted
                   onClose={() => setClassicModal(false)}
                   aria-labelledby="classic-modal-slide-title"
                   aria-describedby="classic-modal-slide-description"
+                  sx={{
+                    // Replicates the old classes.center and classes.modal
+                    display: 'flex',
+                    alignItems: 'center',
+                    '& .MuiDialog-paper': {
+                      maxWidth: '800px',
+                      borderRadius: '6px',
+                      maxHeight: 'unset',
+                      overflow: 'unset',
+                      boxShadow: '0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)',
+                    },
+                  }}
                 >
                   <DialogTitle
                     id="classic-modal-slide-title"
-                    disableTypography
-                    className={classes.modalHeader}
+                    sx={{
+                      // Replicates the old classes.modalHeader and modalTitle
+                      borderBottom: '1px solid #eee',
+                      padding: '24px',
+                      position: 'relative',
+                    }}
                   >
                     <IconButton
-                      className={classes.modalCloseButton}
                       key="close"
                       aria-label="Close"
                       color="inherit"
                       onClick={() => setClassicModal(false)}
+                      size="large"
+                      sx={{
+                        // Replicates the old classes.modalCloseButton and modalClose
+                        position: 'absolute',
+                        right: '0',
+                        top: '0',
+                        width: '24px',
+                        height: '24px',
+                        padding: '0',
+                        margin: '10px',
+                        cursor: 'pointer',
+                        borderRadius: '50%',
+                      }}
                     >
-                      <Close className={classes.modalClose} />
+                      <Close sx={{ width: '1.2em', height: '1.2em' }} />
                     </IconButton>
-                    <h4 className={classes.modalTitle}>Modal title</h4>
+                    <h4
+                      style={{
+                        margin: '0',
+                        lineHeight: '1.42857143',
+                        fontWeight: 500,
+                        fontSize: '20px',
+                      }}
+                    >
+                      Modal title
+                    </h4>
                   </DialogTitle>
                   <DialogContent
                     id="classic-modal-slide-description"
-                    className={classes.modalBody}
+                    sx={{
+                      // Replicates the old classes.modalBody
+                      padding: '24px',
+                    }}
                   >
                     <p>
                       Far far away, behind the word mountains, far from the
@@ -105,7 +164,13 @@ export default function SectionJavascript() {
                       Lorem Ipsum decided to leave for the far World of Grammar.
                     </p>
                   </DialogContent>
-                  <DialogActions className={classes.modalFooter}>
+                  <DialogActions
+                    sx={{
+                      // Replicates the old classes.modalFooter
+                      borderTop: '1px solid #eee',
+                      padding: '24px',
+                    }}
+                  >
                     <Button color="transparent" simple>
                       Nice Button
                     </Button>
@@ -121,12 +186,26 @@ export default function SectionJavascript() {
               </GridItem>
             </GridContainer>
             <GridItem xs={12} sm={12} md={12}>
-              <div className={classes.title}>
+              <Box sx={{
+                // Replicates the old `classes.title` styles
+                textAlign: "center",
+                marginBottom: "30px",
+                minHeight: "32px",
+                textDecoration: "none",
+              }}>
                 <h3>Datetime Picker</h3>
-              </div>
+              </Box>
               <GridContainer>
                 <GridItem xs={12} sm={12} md={6}>
-                  <InputLabel className={classes.label}>
+                  <InputLabel sx={{
+                    // Replicates the old classes.label
+                    cursor: "pointer",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    fontWeight: 400,
+                    lineHeight: 1,
+                    fontSize: "14px",
+                  }}>
                     Datetime Picker
                   </InputLabel>
                   <br />
@@ -140,16 +219,19 @@ export default function SectionJavascript() {
             </GridItem>
           </GridItem>
           <GridItem xs={12} sm={12} md={6}>
-            <div className={classes.title}>
+            <Box sx={{
+              // Replicates the old `classes.title` styles
+              textAlign: "center",
+              marginBottom: "30px",
+              minHeight: "32px",
+              textDecoration: "none",
+            }}>
               <h3>Popovers</h3>
-            </div>
+            </Box>
             <Button onClick={event => setAnchorElLeft(event.currentTarget)}>
               On left
             </Button>
             <Popover
-              classes={{
-                paper: classes.popover
-              }}
               open={Boolean(anchorElLeft)}
               anchorEl={anchorElLeft}
               onClose={() => setAnchorElLeft(null)}
@@ -161,20 +243,39 @@ export default function SectionJavascript() {
                 vertical: "center",
                 horizontal: "right"
               }}
+              sx={{
+                '& .MuiPopover-paper': {
+                  // Replicates the old classes.popover
+                  padding: '10px',
+                  boxShadow: '0 5px 15px -8px rgba(0, 0, 0, 0.24), 0 8px 10px -5px rgba(0, 0, 0, 0.2)',
+                  borderRadius: '3px',
+                },
+              }}
             >
-              <h3 className={classes.popoverHeader}>Popover on left</h3>
-              <div className={classes.popoverBody}>
+              <Box sx={{
+                // Replicates the old classes.popoverHeader
+                padding: '15px',
+                margin: '-15px -15px 10px',
+                backgroundColor: 'grey', // Add your specific color
+                color: '#fff',
+                fontSize: '18px',
+                textAlign: 'center',
+                textTransform: 'uppercase',
+                borderRadius: '3px 3px 0 0',
+              }}>Popover on left</Box>
+              <Box sx={{
+                // Replicates the old classes.popoverBody
+                padding: '0 15px 15px',
+                fontSize: '14px',
+              }}>
                 Here will be some very useful information about his popover.
                 Here will be some very useful information about his popover.
-              </div>
+              </Box>
             </Popover>
             <Button onClick={event => setAnchorElTop(event.currentTarget)}>
               On top
             </Button>
             <Popover
-              classes={{
-                paper: classes.popover
-              }}
               open={Boolean(anchorElTop)}
               anchorEl={anchorElTop}
               onClose={() => setAnchorElTop(null)}
@@ -186,19 +287,38 @@ export default function SectionJavascript() {
                 vertical: "bottom",
                 horizontal: "center"
               }}
+              sx={{
+                '& .MuiPopover-paper': {
+                  // Replicates the old classes.popover
+                  padding: '10px',
+                  boxShadow: '0 5px 15px -8px rgba(0, 0, 0, 0.24), 0 8px 10px -5px rgba(0, 0, 0, 0.2)',
+                  borderRadius: '3px',
+                },
+              }}
             >
-              <h3 className={classes.popoverHeader}>Popover on top</h3>
-              <div className={classes.popoverBody}>
+              <Box sx={{
+                // Replicates the old classes.popoverHeader
+                padding: '15px',
+                margin: '-15px -15px 10px',
+                backgroundColor: 'grey', // Add your specific color
+                color: '#fff',
+                fontSize: '18px',
+                textAlign: 'center',
+                textTransform: 'uppercase',
+                borderRadius: '3px 3px 0 0',
+              }}>Popover on top</Box>
+              <Box sx={{
+                // Replicates the old classes.popoverBody
+                padding: '0 15px 15px',
+                fontSize: '14px',
+              }}>
                 Here will be some very useful information about his popover.
-              </div>
+              </Box>
             </Popover>
             <Button onClick={event => setAnchorElBottom(event.currentTarget)}>
               On bottom
             </Button>
             <Popover
-              classes={{
-                paper: classes.popover
-              }}
               open={Boolean(anchorElBottom)}
               anchorEl={anchorElBottom}
               onClose={() => setAnchorElBottom(null)}
@@ -210,19 +330,38 @@ export default function SectionJavascript() {
                 vertical: "top",
                 horizontal: "center"
               }}
+              sx={{
+                '& .MuiPopover-paper': {
+                  // Replicates the old classes.popover
+                  padding: '10px',
+                  boxShadow: '0 5px 15px -8px rgba(0, 0, 0, 0.24), 0 8px 10px -5px rgba(0, 0, 0, 0.2)',
+                  borderRadius: '3px',
+                },
+              }}
             >
-              <h3 className={classes.popoverHeader}>Popover on bottom</h3>
-              <div className={classes.popoverBody}>
+              <Box sx={{
+                // Replicates the old classes.popoverHeader
+                padding: '15px',
+                margin: '-15px -15px 10px',
+                backgroundColor: 'grey', // Add your specific color
+                color: '#fff',
+                fontSize: '18px',
+                textAlign: 'center',
+                textTransform: 'uppercase',
+                borderRadius: '3px 3px 0 0',
+              }}>Popover on bottom</Box>
+              <Box sx={{
+                // Replicates the old classes.popoverBody
+                padding: '0 15px 15px',
+                fontSize: '14px',
+              }}>
                 Here will be some very useful information about his popover.
-              </div>
+              </Box>
             </Popover>
             <Button onClick={event => setAnchorElRight(event.currentTarget)}>
               On right
             </Button>
             <Popover
-              classes={{
-                paper: classes.popover
-              }}
               open={Boolean(anchorElRight)}
               anchorEl={anchorElRight}
               onClose={() => setAnchorElRight(null)}
@@ -234,22 +373,57 @@ export default function SectionJavascript() {
                 vertical: "center",
                 horizontal: "left"
               }}
+              sx={{
+                '& .MuiPopover-paper': {
+                  // Replicates the old classes.popover
+                  padding: '10px',
+                  boxShadow: '0 5px 15px -8px rgba(0, 0, 0, 0.24), 0 8px 10px -5px rgba(0, 0, 0, 0.2)',
+                  borderRadius: '3px',
+                },
+              }}
             >
-              <h3 className={classes.popoverHeader}>Popover on right</h3>
-              <div className={classes.popoverBody}>
+              <Box sx={{
+                // Replicates the old classes.popoverHeader
+                padding: '15px',
+                margin: '-15px -15px 10px',
+                backgroundColor: 'grey', // Add your specific color
+                color: '#fff',
+                fontSize: '18px',
+                textAlign: 'center',
+                textTransform: 'uppercase',
+                borderRadius: '3px 3px 0 0',
+              }}>Popover on right</Box>
+              <Box sx={{
+                // Replicates the old classes.popoverBody
+                padding: '0 15px 15px',
+                fontSize: '14px',
+              }}>
                 Here will be some very useful information about his popover.
-              </div>
+              </Box>
             </Popover>
             <br />
             <br />
-            <div className={classes.title}>
+            <Box sx={{
+              // Replicates the old `classes.title` styles
+              textAlign: "center",
+              marginBottom: "30px",
+              minHeight: "32px",
+              textDecoration: "none",
+            }}>
               <h3>Tooltips</h3>
-            </div>
+            </Box>
             <Tooltip
               id="tooltip-left"
               title="Tooltip on left"
               placement="left"
-              classes={{ tooltip: classes.tooltip }}
+              sx={{
+                // Replicates the old classes.tooltip styles
+                '& .MuiTooltip-tooltip': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                  fontSize: '12px',
+                  lineHeight: '1.4em',
+                },
+              }}
             >
               <Button>On left</Button>
             </Tooltip>
@@ -257,7 +431,14 @@ export default function SectionJavascript() {
               id="tooltip-top"
               title="Tooltip on top"
               placement="top"
-              classes={{ tooltip: classes.tooltip }}
+              sx={{
+                // Replicates the old classes.tooltip styles
+                '& .MuiTooltip-tooltip': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                  fontSize: '12px',
+                  lineHeight: '1.4em',
+                },
+              }}
             >
               <Button>On top</Button>
             </Tooltip>
@@ -265,7 +446,14 @@ export default function SectionJavascript() {
               id="tooltip-bottom"
               title="Tooltip on bottom"
               placement="bottom"
-              classes={{ tooltip: classes.tooltip }}
+              sx={{
+                // Replicates the old classes.tooltip styles
+                '& .MuiTooltip-tooltip': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                  fontSize: '12px',
+                  lineHeight: '1.4em',
+                },
+              }}
             >
               <Button>On bottom</Button>
             </Tooltip>
@@ -273,16 +461,29 @@ export default function SectionJavascript() {
               id="tooltip-right"
               title="Tooltip on right"
               placement="right"
-              classes={{ tooltip: classes.tooltip }}
+              sx={{
+                // Replicates the old classes.tooltip styles
+                '& .MuiTooltip-tooltip': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                  fontSize: '12px',
+                  lineHeight: '1.4em',
+                },
+              }}
             >
               <Button>On right</Button>
             </Tooltip>
           </GridItem>
         </GridContainer>
-        <div className={classes.title}>
+        <Box sx={{
+          // Replicates the old `classes.title` styles
+          textAlign: "center",
+          marginBottom: "30px",
+          minHeight: "32px",
+          textDecoration: "none",
+        }}>
           <h3>Carousel</h3>
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 }

@@ -1,22 +1,31 @@
 import React from "react";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-// @material-ui/icons
+import { Box } from '@mui/material';
 
-// core components
+// core components (assuming these are already refactored)
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 
-import styles from "assets/jss/material-kit-react/views/componentsSections/completedStyle.js";
-
-const useStyles = makeStyles(styles);
+// Note: Removed the old imports for makeStyles and the styles file.
 
 export default function SectionCompletedExamples() {
-  const classes = useStyles();
   return (
-    <div className={classes.section}>
-      <div className={classes.container}>
-        <GridContainer justify="center">
+    <Box sx={{
+      // Replicates the old `classes.section` styles
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+      padding: "70px 0",
+    }}>
+      <Box sx={{
+        // Replicates the old `classes.container` styles
+        paddingRight: '15px',
+        paddingLeft: '15px',
+        marginRight: 'auto',
+        marginLeft: 'auto',
+        width: '100%',
+        zIndex: 12,
+        color: '#FFFFFF',
+      }}>
+        <GridContainer justifyContent="center">
           <GridItem xs={12} sm={12} md={8}>
             <h2>Completed with examples</h2>
             <h4>
@@ -27,7 +36,7 @@ export default function SectionCompletedExamples() {
             </h4>
           </GridItem>
         </GridContainer>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }

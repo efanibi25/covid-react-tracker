@@ -1,13 +1,9 @@
 
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 
-import usePlacesAutocomplete, { getDetails,getGeocode, getLatLng } from "use-places-autocomplete";
+
+import usePlacesAutocomplete from "use-places-autocomplete";
 import React , { useContext ,useState ,useEffect,Fragment,router, isValidElement}from "react";
-import useIsMounted from 'ismounted';
-import { SettingsInputAntenna } from '@material-ui/icons';
 import GoogleMapReact from 'google-map-react';
-import ScriptTag from 'react-script-tag';
 import { dataContext } from "../../views/mapPage/mapPage.js";
 
 export default function Maps(props) {

@@ -1,15 +1,10 @@
 
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 
-import usePlacesAutocomplete, { getDetails,getGeocode, getLatLng } from "use-places-autocomplete";
+import usePlacesAutocomplete, { getDetails } from "use-places-autocomplete";
 import React , { useContext ,useState ,useEffect,Fragment,router, isValidElement}from "react";
-import useIsMounted from 'ismounted';
-import { SettingsInputAntenna } from '@material-ui/icons';
-import GoogleMapReact from 'google-map-react';
-import ScriptTag from 'react-script-tag';
 import { dataContext } from "../../views/tablePage/tablePage.js";
-import { getSyntheticTrailingComments } from 'typescript';
 
     
 export default function Search(props) {

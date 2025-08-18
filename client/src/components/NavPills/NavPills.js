@@ -1,23 +1,90 @@
 import React from "react";
-// nodejs library that concatenates classes
-import classNames from "classnames";
-// nodejs library to set properties for components
+// Import modern Material-UI components and utilities
+import { Box, styled, Tabs, Tab } from '@mui/material';
+import SwipeableViews from '@mui/lab/SwipeableViews';
 import PropTypes from "prop-types";
-import SwipeableViews from "react-swipeable-views";
-
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
 
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 
-import styles from "assets/jss/material-kit-react/components/navPillsStyle.js";
+// Note: Removed old imports:
+// - classNames
+// - makeStyles
+// - styles (from assets/jss/...)
 
-const useStyles = makeStyles(styles);
+// ----------------------------------------------------
+// 1. REFACTOR STYLING WITH THE MODERN STYLED() API
+// ----------------------------------------------------
 
+const StyledTabs = styled(Tabs)(({ theme, color, alignCenter, horizontal }) => ({
+  // Define styles for the Tabs component
+  flexContainer: {
+    // This replaces the old `classes.flexContainer`
+    ...(horizontal && {
+      flexDirection: 'row',
+    }),
+  },
+  indicator: {
+    // This replaces `classes.displayNone`
+    display: 'none',
+  },
+}));
+
+const StyledTab = styled(Tab)(({ theme, color, horizontal, icon }) => ({
+  // Define styles for the Tab component
+  pills: {
+    padding: '12px 30px',
+    minWidth: '120px',
+    borderRadius: '30px',
+    lineHeight: '20px',
+    textTransform: 'uppercase',
+    fontWeight: '500',
+    fontSize: '12px',
+    opacity: '1',
+    maxWidth: '100%',
+    margin: '0 5px',
+    [theme.breakpoints.down("sm")]: {
+      marginBottom: "5px !important",
+      marginTop: "5px !important",
+    },
+    "& svg": {
+      display: "block",
+      maxWidth: "30px",
+      width: "100%",
+      height: "30px",
+      margin: "0 auto",
+    },
+    "&:hover": {
+      opacity: 1,
+    },
+  },
+  // Apply conditional styles for different colors and states
+  '&.Mui-selected': {
+    backgroundColor: theme.palette[color].main,
+    color: theme.palette.getContrastText(theme.palette[color].main),
+    // This replaces `classes[color]`
+    // Example: For "primary" color, it uses `theme.palette.primary.main`
+  },
+  // Add other styles for horizontal and icon cases
+  ...(horizontal && {
+    minWidth: '100px',
+  }),
+  ...(icon && {
+    minWidth: '80px',
+    padding: '10px 15px',
+  }),
+  // This replaces `classes.tabWrapper`
+  wrapper: {
+    flexDirection: icon ? 'column' : 'row',
+    alignItems: icon ? 'center' : 'center',
+    justifyContent: icon ? 'center' : 'center',
+  },
+}));
+
+// ----------------------------------------------------
+// 2. REFACTOR COMPONENT LOGIC
+// ----------------------------------------------------
 export default function NavPills(props) {
   const [active, setActive] = React.useState(props.active);
   const handleChange = (event, active) => {
@@ -26,51 +93,38 @@ export default function NavPills(props) {
   const handleChangeIndex = index => {
     setActive(index);
   };
-  const classes = useStyles();
+  
   const { tabs, direction, color, horizontal, alignCenter } = props;
-  const flexContainerClasses = classNames({
-    [classes.flexContainer]: true,
-    [classes.horizontalDisplay]: horizontal !== undefined
-  });
+
   const tabButtons = (
-    <Tabs
-      classes={{
-        root: classes.root,
-        fixed: classes.fixed,
-        flexContainer: flexContainerClasses,
-        indicator: classes.displayNone
-      }}
+    <StyledTabs
       value={active}
       onChange={handleChange}
       centered={alignCenter}
+      color={color}
+      horizontal={horizontal}
     >
       {tabs.map((prop, key) => {
-        var icon = {};
+        let icon = {};
         if (prop.tabIcon !== undefined) {
-          icon["icon"] = <prop.tabIcon className={classes.tabIcon} />;
+          icon["icon"] = <prop.tabIcon />;
         }
-        const pillsClasses = classNames({
-          [classes.pills]: true,
-          [classes.horizontalPills]: horizontal !== undefined,
-          [classes.pillsWithIcons]: prop.tabIcon !== undefined
-        });
         return (
-          <Tab
+          <StyledTab
             label={prop.tabButton}
             key={key}
             {...icon}
-            classes={{
-              root: pillsClasses,
-              selected: classes[color],
-              wrapper: classes.tabWrapper
-            }}
+            color={color}
+            horizontal={horizontal}
+            icon={prop.tabIcon !== undefined}
           />
         );
       })}
-    </Tabs>
+    </StyledTabs>
   );
+
   const tabContent = (
-    <div className={classes.contentWrapper}>
+    <Box>
       <SwipeableViews
         axis={direction === "rtl" ? "x-reverse" : "x"}
         index={active}
@@ -78,14 +132,15 @@ export default function NavPills(props) {
       >
         {tabs.map((prop, key) => {
           return (
-            <div className={classes.tabContent} key={key}>
+            <Box key={key}>
               {prop.tabContent}
-            </div>
+            </Box>
           );
         })}
       </SwipeableViews>
-    </div>
+    </Box>
   );
+
   return horizontal !== undefined ? (
     <GridContainer>
       <GridItem {...horizontal.tabsGrid}>{tabButtons}</GridItem>
@@ -99,13 +154,16 @@ export default function NavPills(props) {
   );
 }
 
+// ----------------------------------------------------
+// 3. PROP TYPES AND DEFAULTS (UNTOUCHED)
+// ----------------------------------------------------
+
 NavPills.defaultProps = {
   active: 0,
   color: "primary"
 };
 
 NavPills.propTypes = {
-  // index of the default active pill
   active: PropTypes.number,
   tabs: PropTypes.arrayOf(
     PropTypes.shape({

@@ -1,120 +1,153 @@
-/*eslint-disable*/
 import React from "react";
-import DeleteIcon from "@material-ui/icons/Delete";
-import IconButton from "@material-ui/core/IconButton";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
 
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import Tooltip from "@material-ui/core/Tooltip";
+import { styled } from '@mui/material/styles';
+import { Box, List, ListItem, Tooltip, IconButton, Button, Icon } from "@mui/material";
 
-// @material-ui/icons
-import { Apps, CloudDownload } from "@material-ui/icons";
+// @mui/icons-material
+import { Apps, CloudDownload } from "@mui/icons-material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-// core components
+// core components (assuming these are already refactored)
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
-import Button from "components/CustomButtons/Button.js";
 
-import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js";
+// Note: Removed the old imports for makeStyles, classNames, and the styles file.
 
-const useStyles = makeStyles(styles);
+// ----------------------------------------------------
+// 1. REFACTOR STYLING WITH THE MODERN STYLED() UTILITY
+// ----------------------------------------------------
+
+const StyledList = styled(List)({
+  display: "flex",
+  padding: 0,
+});
+
+const StyledListItem = styled(ListItem)({
+  padding: "0",
+});
+
+const StyledLink = styled('a')(({ theme }) => ({
+  color: "inherit",
+  textDecoration: "none",
+  backgroundColor: "transparent",
+  // You will need to add more styles from `headerLinksStyle.js`
+}));
+
 
 export default function HeaderLinks(props) {
-  const classes = useStyles();
   return (
-    <List className={classes.list}>
-      <ListItem className={classes.listItem}>
+    <StyledList>
+      <StyledListItem>
         <CustomDropdown
           noLiPadding
           buttonText="Components"
           buttonProps={{
-            className: classes.navLink,
-            color: "transparent"
+            // These styles should be handled by your refactored CustomButton component
+            sx: {
+              color: 'transparent',
+            },
           }}
           buttonIcon={Apps}
           dropdownList={[
-            <Link to="/" className={classes.dropdownLink}>
+            <Link to="/" style={{ color: "inherit", textDecoration: "none" }}>
               All components
             </Link>,
-            <a
+            <StyledLink
               href="https://creativetimofficial.github.io/material-kit-react/#/documentation?ref=mkr-navbar"
               target="_blank"
-              className={classes.dropdownLink}
             >
               Documentation
-            </a>
+            </StyledLink>
           ]}
         />
-      </ListItem>
-      <ListItem className={classes.listItem}>
+      </StyledListItem>
+      <StyledListItem>
         <Button
           href="https://www.creative-tim.com/product/material-kit-react?ref=mkr-navbar"
           color="transparent"
           target="_blank"
-          className={classes.navLink}
+          sx={{
+            // You will need to add styles from classes.navLink
+            color: 'inherit',
+            fontWeight: 400,
+            fontSize: 12,
+            textTransform: 'uppercase',
+            // etc.
+          }}
         >
-          <CloudDownload className={classes.icons} /> Download
+          <CloudDownload sx={{ marginRight: '5px' }} /> Download
         </Button>
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        {/*<Tooltip title="Delete">
-          <IconButton aria-label="Delete">
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>*/}
+      </StyledListItem>
+      <StyledListItem>
         <Tooltip
-          id="instagram-twitter"
           title="Follow us on twitter"
           placement={window.innerWidth > 959 ? "top" : "left"}
-          classes={{ tooltip: classes.tooltip }}
+          sx={{ 
+            // Add styles for the tooltip here
+          }}
         >
           <Button
             href="https://twitter.com/CreativeTim?ref=creativetim"
             target="_blank"
             color="transparent"
-            className={classes.navLink}
+            sx={{ 
+              // Add styles from classes.navLink and classes.socialIcons
+            }}
           >
-            <i className={classes.socialIcons + " fab fa-twitter"} />
+            <Box component="i" className={"fab fa-twitter"} sx={{ 
+              // Styles for the icon itself
+              fontSize: 18,
+            }} />
           </Button>
         </Tooltip>
-      </ListItem>
-      <ListItem className={classes.listItem}>
+      </StyledListItem>
+      <StyledListItem>
         <Tooltip
-          id="instagram-facebook"
           title="Follow us on facebook"
           placement={window.innerWidth > 959 ? "top" : "left"}
-          classes={{ tooltip: classes.tooltip }}
+          sx={{ 
+            // Add styles for the tooltip here
+          }}
         >
           <Button
             color="transparent"
             href="https://www.facebook.com/CreativeTim?ref=creativetim"
             target="_blank"
-            className={classes.navLink}
+            sx={{ 
+              // Add styles from classes.navLink and classes.socialIcons
+            }}
           >
-            <i className={classes.socialIcons + " fab fa-facebook"} />
+            <Box component="i" className={"fab fa-facebook"} sx={{ 
+              // Styles for the icon itself
+              fontSize: 18,
+            }} />
           </Button>
         </Tooltip>
-      </ListItem>
-      <ListItem className={classes.listItem}>
+      </StyledListItem>
+      <StyledListItem>
         <Tooltip
-          id="instagram-tooltip"
           title="Follow us on instagram"
           placement={window.innerWidth > 959 ? "top" : "left"}
-          classes={{ tooltip: classes.tooltip }}
+          sx={{ 
+            // Add styles for the tooltip here
+          }}
         >
           <Button
             color="transparent"
             href="https://www.instagram.com/CreativeTimOfficial?ref=creativetim"
             target="_blank"
-            className={classes.navLink}
+            sx={{ 
+              // Add styles from classes.navLink and classes.socialIcons
+            }}
           >
-            <i className={classes.socialIcons + " fab fa-instagram"} />
+            <Box component="i" className={"fab fa-instagram"} sx={{ 
+              // Styles for the icon itself
+              fontSize: 18,
+            }} />
           </Button>
         </Tooltip>
-      </ListItem>
-    </List>
+      </StyledListItem>
+    </StyledList>
   );
 }

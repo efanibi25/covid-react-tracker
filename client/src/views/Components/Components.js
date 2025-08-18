@@ -1,12 +1,9 @@
 import React from "react";
-// nodejs library that concatenates classes
-import classNames from "classnames";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-// @material-ui/icons
-// core components
+import { Box } from "@mui/material";
+
+// core components (assuming these are already refactored)
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -28,15 +25,12 @@ import SectionLogin from "./Sections/SectionLogin.js";
 import SectionExamples from "./Sections/SectionExamples.js";
 import SectionDownload from "./Sections/SectionDownload.js";
 
-import styles from "assets/jss/material-kit-react/views/components.js";
-
-const useStyles = makeStyles(styles);
+// Note: Removed the old imports for makeStyles, classNames, and the styles file.
 
 export default function Components(props) {
-  const classes = useStyles();
   const { ...rest } = props;
   return (
-    <div>
+    <Box>
       <Header
         brand="Material Kit React"
         rightLinks={<HeaderLinks />}
@@ -49,21 +43,55 @@ export default function Components(props) {
         {...rest}
       />
       <Parallax image={require("assets/img/bg4.jpg")}>
-        <div className={classes.container}>
+        <Box sx={{
+          // Replicates the old container class styles
+          zIndex: 12,
+          color: '#FFFFFF',
+          paddingRight: '15px',
+          paddingLeft: '15px',
+          marginRight: 'auto',
+          marginLeft: 'auto',
+          width: '100%',
+        }}>
           <GridContainer>
             <GridItem>
-              <div className={classes.brand}>
-                <h1 className={classes.title}>Material Kit React.</h1>
-                <h3 className={classes.subtitle}>
+              <Box sx={{
+                // Replicates the old brand class styles
+                color: '#FFFFFF',
+                textAlign: 'left',
+              }}>
+                <Box component="h1" sx={{
+                  // Replicates the old title class styles
+                  fontSize: '4.2rem',
+                  fontWeight: 600,
+                  display: 'inline-block',
+                  position: 'relative',
+                }}>
+                  Material Kit React.
+                </Box>
+                <Box component="h3" sx={{
+                  // Replicates the old subtitle class styles
+                  fontSize: '1.313rem',
+                  maxWidth: '500px',
+                  margin: '10px 0 0',
+                }}>
                   A Badass Material-UI Kit based on Material Design.
-                </h3>
-              </div>
+                </Box>
+              </Box>
             </GridItem>
           </GridContainer>
-        </div>
+        </Box>
       </Parallax>
 
-      <div className={classNames(classes.main, classes.mainRaised)}>
+      <Box sx={{
+        // Replicates the old main and mainRaised class styles
+        position: 'relative',
+        zIndex: 3,
+        background: '#FFFFFF',
+        boxShadow: '0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)',
+        margin: '-60px 30px 0',
+        borderRadius: '6px',
+      }}>
         <SectionBasics />
         <SectionNavbars />
         <SectionTabs />
@@ -74,8 +102,15 @@ export default function Components(props) {
         <SectionCarousel />
         <SectionCompletedExamples />
         <SectionLogin />
-        <GridItem md={12} className={classes.textCenter}>
-          <Link to={"/login-page"} className={classes.link}>
+        <GridItem md={12} sx={{
+          // Replicates the old textCenter class styles
+          textAlign: 'center',
+        }}>
+          <Link to={"/login-page"} style={{
+            // Replicates the old link class styles
+            color: 'inherit',
+            textDecoration: 'none',
+          }}>
             <Button color="primary" size="lg" simple>
               View Login Page
             </Button>
@@ -83,8 +118,8 @@ export default function Components(props) {
         </GridItem>
         <SectionExamples />
         <SectionDownload />
-      </div>
+      </Box>
       <Footer />
-    </div>
+    </Box>
   );
 }

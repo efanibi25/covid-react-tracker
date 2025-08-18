@@ -1,90 +1,67 @@
 import React from "react";
-// nodejs library to set properties for components
 import PropTypes from "prop-types";
-// nodejs library that concatenates classes
-import classNames from "classnames";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
+import { TextField } from "@mui/material";
 
-import styles from "assets/jss/material-kit-react/components/customInputStyle.js";
-
-const useStyles = makeStyles(styles);
+// Note: All old imports for makeStyles, classNames, FormControl, InputLabel, and Input are removed.
 
 export default function CustomInput(props) {
-  const classes = useStyles();
   const {
-    formControlProps,
     labelText,
     id,
-    labelProps,
     inputProps,
     error,
+    success,
     white,
-    inputRootCustomClasses,
-    success
+    ...rest
   } = props;
 
-  const labelClasses = classNames({
-    [" " + classes.labelRootError]: error,
-    [" " + classes.labelRootSuccess]: success && !error
-  });
-  const underlineClasses = classNames({
-    [classes.underlineError]: error,
-    [classes.underlineSuccess]: success && !error,
-    [classes.underline]: true,
-    [classes.whiteUnderline]: white
-  });
-  const marginTop = classNames({
-    [inputRootCustomClasses]: inputRootCustomClasses !== undefined
-  });
-  const inputClasses = classNames({
-    [classes.input]: true,
-    [classes.whiteInput]: white
-  });
-  var formControlClasses;
-  if (formControlProps !== undefined) {
-    formControlClasses = classNames(
-      formControlProps.className,
-      classes.formControl
-    );
-  } else {
-    formControlClasses = classes.formControl;
-  }
+  // The 'variant' prop controls the underline and border style. 'standard' is the default.
+  // The 'error' prop automatically changes the color of the label and underline to red.
+  // We can use the 'sx' prop for any custom styles, like the `white` prop.
+
+  const customSx = {
+    // This handles your 'white' prop
+    ...(white && {
+      '& .MuiInputBase-input': {
+        color: '#FFFFFF !important',
+      },
+      '& .MuiInput-underline:before': {
+        borderBottomColor: '#FFFFFF !important',
+      },
+      '& .MuiInput-underline:after': {
+        borderBottomColor: '#FFFFFF !important',
+      },
+      '& .MuiInputLabel-root': {
+        color: '#FFFFFF !important',
+      },
+    }),
+
+    // Your old success logic can be handled with the 'sx' prop
+    ...(success && !error && {
+      '& .MuiInput-underline:after': {
+        borderBottomColor: 'green !important',
+      },
+    }),
+  };
+
   return (
-    <FormControl {...formControlProps} className={formControlClasses}>
-      {labelText !== undefined ? (
-        <InputLabel
-          className={classes.labelRoot + " " + labelClasses}
-          htmlFor={id}
-          {...labelProps}
-        >
-          {labelText}
-        </InputLabel>
-      ) : null}
-      <Input
-        classes={{
-          input: inputClasses,
-          root: marginTop,
-          disabled: classes.disabled,
-          underline: underlineClasses
-        }}
-        id={id}
-        {...inputProps}
-      />
-    </FormControl>
+    <TextField
+      label={labelText}
+      id={id}
+      error={error}
+      {...inputProps}
+      sx={customSx}
+      {...rest}
+    />
   );
 }
 
 CustomInput.propTypes = {
   labelText: PropTypes.node,
-  labelProps: PropTypes.object,
   id: PropTypes.string,
   inputProps: PropTypes.object,
-  formControlProps: PropTypes.object,
-  inputRootCustomClasses: PropTypes.string,
+  formControlProps: PropTypes.object, // Note: This prop is now ignored as TextField handles it internally
+  inputRootCustomClasses: PropTypes.string, // Note: This prop is now ignored as TextField handles it internally
   error: PropTypes.bool,
   success: PropTypes.bool,
   white: PropTypes.bool

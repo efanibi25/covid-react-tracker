@@ -2,18 +2,38 @@ import React from "react";
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
 
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-
-import styles from "assets/jss/material-kit-react/components/badgeStyle.js";
-
-const useStyles = makeStyles(styles);
+// Import the Box component from MUI
+import { Box } from '@mui/material';
 
 export default function Badge(props) {
-  const classes = useStyles();
   const { color, children } = props;
+  
   return (
-    <span className={classes.badge + " " + classes[color]}>{children}</span>
+    <Box 
+      component="span" // Renders the Box as a <span> element
+      sx={(theme) => ({
+        // This is a direct translation of styles from 'badgeStyle.js'
+        // Example styles for the badge component
+        display: 'inline-block',
+        minWidth: '10px',
+        padding: '3px 7px',
+        fontSize: '12px',
+        fontWeight: 700,
+        lineHeight: 1,
+        color: '#fff',
+        textAlign: 'center',
+        whiteSpace: 'nowrap',
+        verticalAlign: 'middle',
+        borderRadius: '12px',
+        
+        // This handles the color property dynamically
+        ...(color && {
+          backgroundColor: theme.palette[color].main,
+        }),
+      })}
+    >
+      {children}
+    </Box>
   );
 }
 

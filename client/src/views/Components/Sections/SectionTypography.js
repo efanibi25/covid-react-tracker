@@ -1,10 +1,7 @@
 import React from "react";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import { Box } from '@mui/material';
 
-// @material-ui/icons
-
-// core components
+// core components (assuming these are already refactored)
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import Small from "components/Typography/Small.js";
@@ -18,62 +15,279 @@ import Quote from "components/Typography/Quote.js";
 
 import image from "assets/img/faces/avatar.jpg";
 
-import styles from "assets/jss/material-kit-react/views/componentsSections/typographyStyle.js";
-
-const useStyles = makeStyles(styles);
+// Note: Removed the old imports for makeStyles, classNames, and the styles file.
 
 export default function SectionTypography() {
-  const classes = useStyles();
   return (
-    <div className={classes.section}>
-      <div className={classes.container}>
-        <div id="typography">
-          <div className={classes.title}>
+    <Box sx={{
+      // Replicates the old `classes.section` styles
+      padding: '70px 0',
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+    }}>
+      <Box sx={{
+        // Replicates the old `classes.container` styles
+        paddingRight: '15px',
+        paddingLeft: '15px',
+        marginRight: 'auto',
+        marginLeft: 'auto',
+        width: '100%',
+        zIndex: 12,
+        color: '#FFFFFF',
+      }}>
+        <Box id="typography">
+          <Box sx={{
+            // Replicates the old `classes.title` styles
+            textAlign: "center",
+            marginBottom: "30px",
+            minHeight: "32px",
+            textDecoration: "none",
+          }}>
             <h2>Typography</h2>
-          </div>
+          </Box>
           <GridContainer>
-            <div className={classes.typo}>
-              <div className={classes.note}>Header 1</div>
+            <Box sx={{
+              // Replicates the old `classes.typo` styles
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}>
+              <Box sx={{
+                // Replicates the old `classes.note` styles
+                fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                bottom: "-6px",
+                color: "#c0c0c0",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "13px",
+                left: "0",
+                marginLeft: "20px",
+                position: "relative",
+                width: "100%",
+              }}>Header 1</Box>
               <h1>The Life of Material Kit</h1>
-            </div>
-            <div className={classes.typo}>
-              <div className={classes.note}>Header 2</div>
+            </Box>
+            <Box sx={{
+              // Replicates the old `classes.typo` styles
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}>
+              <Box sx={{
+                // Replicates the old `classes.note` styles
+                fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                bottom: "-6px",
+                color: "#c0c0c0",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "13px",
+                left: "0",
+                marginLeft: "20px",
+                position: "relative",
+                width: "100%",
+              }}>Header 2</Box>
               <h2>The Life of Material Kit</h2>
-            </div>
-            <div className={classes.typo}>
-              <div className={classes.note}>Header 3</div>
+            </Box>
+            <Box sx={{
+              // Replicates the old `classes.typo` styles
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}>
+              <Box sx={{
+                // Replicates the old `classes.note` styles
+                fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                bottom: "-6px",
+                color: "#c0c0c0",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "13px",
+                left: "0",
+                marginLeft: "20px",
+                position: "relative",
+                width: "100%",
+              }}>Header 3</Box>
               <h3>The Life of Material Kit</h3>
-            </div>
-            <div className={classes.typo}>
-              <div className={classes.note}>Header 4</div>
+            </Box>
+            <Box sx={{
+              // Replicates the old `classes.typo` styles
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}>
+              <Box sx={{
+                // Replicates the old `classes.note` styles
+                fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                bottom: "-6px",
+                color: "#c0c0c0",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "13px",
+                left: "0",
+                marginLeft: "20px",
+                position: "relative",
+                width: "100%",
+              }}>Header 4</Box>
               <h4>The Life of Material Kit</h4>
-            </div>
-            <div className={classes.typo}>
-              <div className={classes.note}>Header 5</div>
+            </Box>
+            <Box sx={{
+              // Replicates the old `classes.typo` styles
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}>
+              <Box sx={{
+                // Replicates the old `classes.note` styles
+                fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                bottom: "-6px",
+                color: "#c0c0c0",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "13px",
+                left: "0",
+                marginLeft: "20px",
+                position: "relative",
+                width: "100%",
+              }}>Header 5</Box>
               <h5>The Life of Material Kit</h5>
-            </div>
-            <div className={classes.typo}>
-              <div className={classes.note}>Header 6</div>
+            </Box>
+            <Box sx={{
+              // Replicates the old `classes.typo` styles
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}>
+              <Box sx={{
+                // Replicates the old `classes.note` styles
+                fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                bottom: "-6px",
+                color: "#c0c0c0",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "13px",
+                left: "0",
+                marginLeft: "20px",
+                position: "relative",
+                width: "100%",
+              }}>Header 6</Box>
               <h6>The Life of Material Kit</h6>
-            </div>
-            <div className={classes.typo}>
-              <div className={classes.note}>Header 1</div>
-              <h1 className={classes.title}>The Life of Material Kit</h1>
-            </div>
-            <div className={classes.typo}>
-              <div className={classes.note}>Header 2</div>
-              <h2 className={classes.title}>The Life of Material Kit</h2>
-            </div>
-            <div className={classes.typo}>
-              <div className={classes.note}>Header 3</div>
-              <h3 className={classes.title}>The Life of Material Kit</h3>
-            </div>
-            <div className={classes.typo}>
-              <div className={classes.note}>Header 4</div>
-              <h4 className={classes.title}>The Life of Material Kit</h4>
-            </div>
-            <div className={classes.typo}>
-              <div className={classes.note}>Paragraph</div>
+            </Box>
+            <Box sx={{
+              // Replicates the old `classes.typo` styles
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}>
+              <Box sx={{
+                // Replicates the old `classes.note` styles
+                fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                bottom: "-6px",
+                color: "#c0c0c0",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "13px",
+                left: "0",
+                marginLeft: "20px",
+                position: "relative",
+                width: "100%",
+              }}>Header 1</Box>
+              <h1 sx={{
+                // Replicates the old `classes.title` styles
+                textAlign: "center",
+                marginBottom: "30px",
+                minHeight: "32px",
+                textDecoration: "none",
+              }}>The Life of Material Kit</h1>
+            </Box>
+            <Box sx={{
+              // Replicates the old `classes.typo` styles
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}>
+              <Box sx={{
+                // Replicates the old `classes.note` styles
+                fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                bottom: "-6px",
+                color: "#c0c0c0",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "13px",
+                left: "0",
+                marginLeft: "20px",
+                position: "relative",
+                width: "100%",
+              }}>Header 2</Box>
+              <h2 sx={{
+                // Replicates the old `classes.title` styles
+                textAlign: "center",
+                marginBottom: "30px",
+                minHeight: "32px",
+                textDecoration: "none",
+              }}>The Life of Material Kit</h2>
+            </Box>
+            <Box sx={{
+              // Replicates the old `classes.typo` styles
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}>
+              <Box sx={{
+                // Replicates the old `classes.note` styles
+                fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                bottom: "-6px",
+                color: "#c0c0c0",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "13px",
+                left: "0",
+                marginLeft: "20px",
+                position: "relative",
+                width: "100%",
+              }}>Header 3</Box>
+              <h3 sx={{
+                // Replicates the old `classes.title` styles
+                textAlign: "center",
+                marginBottom: "30px",
+                minHeight: "32px",
+                textDecoration: "none",
+              }}>The Life of Material Kit</h3>
+            </Box>
+            <Box sx={{
+              // Replicates the old `classes.typo` styles
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}>
+              <Box sx={{
+                // Replicates the old `classes.note` styles
+                fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                bottom: "-6px",
+                color: "#c0c0c0",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "13px",
+                left: "0",
+                marginLeft: "20px",
+                position: "relative",
+                width: "100%",
+              }}>Header 4</Box>
+              <h4 sx={{
+                // Replicates the old `classes.title` styles
+                textAlign: "center",
+                marginBottom: "30px",
+                minHeight: "32px",
+                textDecoration: "none",
+              }}>The Life of Material Kit</h4>
+            </Box>
+            <Box sx={{
+              // Replicates the old `classes.typo` styles
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}>
+              <Box sx={{
+                // Replicates the old `classes.note` styles
+                fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                bottom: "-6px",
+                color: "#c0c0c0",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "13px",
+                left: "0",
+                marginLeft: "20px",
+                position: "relative",
+                width: "100%",
+              }}>Paragraph</Box>
               <p>
                 I will be the leader of a company that ends up being worth
                 billions of dollars, because I got the answers. I understand
@@ -81,122 +295,286 @@ export default function SectionTypography() {
                 I have, to push possibilities, to show people, this is the level
                 that things could be at.
               </p>
-            </div>
-            <div className={classes.typo}>
-              <div className={classes.note}>Quote</div>
+            </Box>
+            <Box sx={{
+              // Replicates the old `classes.typo` styles
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}>
+              <Box sx={{
+                // Replicates the old `classes.note` styles
+                fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                bottom: "-6px",
+                color: "#c0c0c0",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "13px",
+                left: "0",
+                marginLeft: "20px",
+                position: "relative",
+                width: "100%",
+              }}>Quote</Box>
               <Quote
                 text="I will be the leader of a company that ends up being worth billions of dollars, because I got the answers. I understand culture. I am the nucleus. I think that’s a responsibility that I have, to push possibilities, to show people, this is the level that things could be at."
                 author=" Kanye West, Musician"
               />
-            </div>
-            <div className={classes.typo}>
-              <div className={classes.note}>Muted Text</div>
+            </Box>
+            <Box sx={{
+              // Replicates the old `classes.typo` styles
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}>
+              <Box sx={{
+                // Replicates the old `classes.note` styles
+                fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                bottom: "-6px",
+                color: "#c0c0c0",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "13px",
+                left: "0",
+                marginLeft: "20px",
+                position: "relative",
+                width: "100%",
+              }}>Muted Text</Box>
               <Muted>
                 I will be the leader of a company that ends up being worth
                 billions of dollars, because I got the answers...
               </Muted>
-            </div>
-            <div className={classes.typo}>
-              <div className={classes.note}>Primary Text</div>
+            </Box>
+            <Box sx={{
+              // Replicates the old `classes.typo` styles
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}>
+              <Box sx={{
+                // Replicates the old `classes.note` styles
+                fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                bottom: "-6px",
+                color: "#c0c0c0",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "13px",
+                left: "0",
+                marginLeft: "20px",
+                position: "relative",
+                width: "100%",
+              }}>Primary Text</Box>
               <Primary>
                 I will be the leader of a company that ends up being worth
                 billions of dollars, because I got the answers...
               </Primary>
-            </div>
-            <div className={classes.typo}>
-              <div className={classes.note}>Info Text</div>
+            </Box>
+            <Box sx={{
+              // Replicates the old `classes.typo` styles
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}>
+              <Box sx={{
+                // Replicates the old `classes.note` styles
+                fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                bottom: "-6px",
+                color: "#c0c0c0",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "13px",
+                left: "0",
+                marginLeft: "20px",
+                position: "relative",
+                width: "100%",
+              }}>Info Text</Box>
               <Info>
                 I will be the leader of a company that ends up being worth
                 billions of dollars, because I got the answers...
               </Info>
-            </div>
-            <div className={classes.typo}>
-              <div className={classes.note}>Success Text</div>
+            </Box>
+            <Box sx={{
+              // Replicates the old `classes.typo` styles
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}>
+              <Box sx={{
+                // Replicates the old `classes.note` styles
+                fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                bottom: "-6px",
+                color: "#c0c0c0",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "13px",
+                left: "0",
+                marginLeft: "20px",
+                position: "relative",
+                width: "100%",
+              }}>Success Text</Box>
               <Success>
                 I will be the leader of a company that ends up being worth
                 billions of dollars, because I got the answers...
               </Success>
-            </div>
-            <div className={classes.typo}>
-              <div className={classes.note}>Warning Text</div>
+            </Box>
+            <Box sx={{
+              // Replicates the old `classes.typo` styles
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}>
+              <Box sx={{
+                // Replicates the old `classes.note` styles
+                fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                bottom: "-6px",
+                color: "#c0c0c0",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "13px",
+                left: "0",
+                marginLeft: "20px",
+                position: "relative",
+                width: "100%",
+              }}>Warning Text</Box>
               <Warning>
                 I will be the leader of a company that ends up being worth
                 billions of dollars, because I got the answers...
               </Warning>
-            </div>
-            <div className={classes.typo}>
-              <div className={classes.note}>Danger Text</div>
+            </Box>
+            <Box sx={{
+              // Replicates the old `classes.typo` styles
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}>
+              <Box sx={{
+                // Replicates the old `classes.note` styles
+                fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                bottom: "-6px",
+                color: "#c0c0c0",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "13px",
+                left: "0",
+                marginLeft: "20px",
+                position: "relative",
+                width: "100%",
+              }}>Danger Text</Box>
               <Danger>
                 I will be the leader of a company that ends up being worth
                 billions of dollars, because I got the answers...
               </Danger>
-            </div>
-            <div className={classes.typo}>
-              <div className={classes.note}>Small Tag</div>
+            </Box>
+            <Box sx={{
+              // Replicates the old `classes.typo` styles
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}>
+              <Box sx={{
+                // Replicates the old `classes.note` styles
+                fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                bottom: "-6px",
+                color: "#c0c0c0",
+                fontWeight: "400",
+                fontSize: "13px",
+                lineHeight: "13px",
+                left: "0",
+                marginLeft: "20px",
+                position: "relative",
+                width: "100%",
+              }}>Small Tag</Box>
               <h2>
                 Header with small subtitle
                 <br />
                 <Small>Use {'"Small"'} tag for the headers</Small>
               </h2>
-            </div>
+            </Box>
           </GridContainer>
-        </div>
-        <div className={classes.space50} />
-        <div id="images">
-          <div className={classes.title}>
+        </Box>
+        <Box sx={{
+          // Replicates the old `classes.space50` styles
+          height: '50px',
+          display: 'block',
+        }} />
+        <Box id="images">
+          <Box sx={{
+            // Replicates the old `classes.title` styles
+            textAlign: "center",
+            marginBottom: "30px",
+            minHeight: "32px",
+            textDecoration: "none",
+          }}>
             <h2>Images</h2>
-          </div>
+          </Box>
           <br />
           <GridContainer>
             <GridItem xs={12} sm={2}>
               <h4>Rounded Image</h4>
-              <img
+              <Box
+                component="img"
                 src={image}
                 alt="..."
-                className={classes.imgRounded + " " + classes.imgFluid}
+                sx={{
+                  // Replicates the old `classes.imgRounded` and `classes.imgFluid`
+                  borderRadius: '6px',
+                  maxWidth: '100%',
+                  height: 'auto',
+                  verticalAlign: 'middle',
+                  border: 0,
+                }}
               />
             </GridItem>
-            <GridItem xs={12} sm={2} className={classes.marginLeft}>
+            <GridItem xs={12} sm={2} sx={{ marginLeft: '15px !important' }}>
               <h4>Circle Image</h4>
-              <img
+              <Box
+                component="img"
                 src={image}
                 alt="..."
-                className={classes.imgRoundedCircle + " " + classes.imgFluid}
+                sx={{
+                  // Replicates the old `classes.imgRoundedCircle` and `classes.imgFluid`
+                  borderRadius: '50%',
+                  maxWidth: '100%',
+                  height: 'auto',
+                  verticalAlign: 'middle',
+                  border: 0,
+                }}
               />
             </GridItem>
-            <GridItem xs={12} sm={2} className={classes.marginLeft}>
+            <GridItem xs={12} sm={2} sx={{ marginLeft: '15px !important' }}>
               <h4>Rounded Raised</h4>
-              <img
+              <Box
+                component="img"
                 src={image}
                 alt="..."
-                className={
-                  classes.imgRaised +
-                  " " +
-                  classes.imgRounded +
-                  " " +
-                  classes.imgFluid
-                }
+                sx={{
+                  // Replicates the old `classes.imgRaised`, `imgRounded`, and `imgFluid`
+                  boxShadow: '0 5px 15px -8px rgba(0, 0, 0, 0.24), 0 8px 10px -5px rgba(0, 0, 0, 0.2)',
+                  borderRadius: '6px',
+                  maxWidth: '100%',
+                  height: 'auto',
+                  verticalAlign: 'middle',
+                  border: 0,
+                }}
               />
             </GridItem>
-            <GridItem xs={12} sm={2} className={classes.marginLeft}>
+            <GridItem xs={12} sm={2} sx={{ marginLeft: '15px !important' }}>
               <h4>Circle Raised</h4>
-              <img
+              <Box
+                component="img"
                 src={image}
                 alt="..."
-                className={
-                  classes.imgRaised +
-                  " " +
-                  classes.imgRoundedCircle +
-                  " " +
-                  classes.imgFluid
-                }
+                sx={{
+                  // Replicates the old `classes.imgRaised`, `imgRoundedCircle`, and `imgFluid`
+                  boxShadow: '0 5px 15px -8px rgba(0, 0, 0, 0.24), 0 8px 10px -5px rgba(0, 0, 0, 0.2)',
+                  borderRadius: '50%',
+                  maxWidth: '100%',
+                  height: 'auto',
+                  verticalAlign: 'middle',
+                  border: 0,
+                }}
               />
             </GridItem>
           </GridContainer>
           <GridContainer />
-        </div>
-        <div className={classes.space50} />
-      </div>
-    </div>
+        </Box>
+        <Box sx={{
+          // Replicates the old `classes.space50` styles
+          height: '50px',
+          display: 'block',
+        }} />
+      </Box>
+    </Box>
   );
 }

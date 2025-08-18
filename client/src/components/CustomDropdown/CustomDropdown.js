@@ -1,26 +1,103 @@
 import React from "react";
-// nodejs library that concatenates classes
-import classNames from "classnames";
-// nodejs library to set properties for components
 import PropTypes from "prop-types";
+import { styled } from '@mui/material/styles';
+import {
+  MenuItem,
+  MenuList,
+  ClickAwayListener,
+  Paper,
+  Grow,
+  Divider,
+  Icon,
+  Popper,
+  Button
+} from "@mui/material";
 
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import MenuItem from "@material-ui/core/MenuItem";
-import MenuList from "@material-ui/core/MenuList";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import Paper from "@material-ui/core/Paper";
-import Grow from "@material-ui/core/Grow";
-import Divider from "@material-ui/core/Divider";
-import Icon from "@material-ui/core/Icon";
-import Popper from "@material-ui/core/Popper";
+// Note: Removed the old imports for classNames, makeStyles, and the styles file.
 
-// core components
-import Button from "components/CustomButtons/Button.js";
+const StyledButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== 'rtlActive' && prop !== 'caret' && prop !== 'open',
+})(({ theme, ownerState }) => ({
+  // Define styles for the caret
+  caret: {
+    ...{
+      width: 0,
+      height: 0,
+      borderLeft: '5px solid transparent',
+      borderRight: '5px solid transparent',
+      borderTop: '5px solid ' + theme.palette.text.primary,
+      display: 'inline-block',
+      marginLeft: '5px',
+    },
+    // Styles for caret active state
+    ...(ownerState.open && {
+      transform: 'rotate(180deg)',
+    }),
+    // Styles for RTL
+    ...(ownerState.rtlActive && {
+      marginLeft: '0',
+      marginRight: '5px',
+    }),
+  },
+}));
 
-import styles from "assets/jss/material-kit-react/components/customDropdownStyle.js";
+const StyledPopper = styled(Popper, {
+  shouldForwardProp: (prop) => prop !== 'open' && prop !== 'popperResponsive',
+})(({ ownerState }) => ({
+  // Styles for the popper
+  zIndex: 100,
+  '&[x-placement*="bottom"]': {
+    marginTop: '5px',
+  },
+  '&[x-placement*="top"]': {
+    marginBottom: '5px',
+  },
+  // Styles for popper responsive
+  ...ownerState.popperResponsive && {
+    '@media (max-width: 991px)': {
+      position: 'static !important',
+      transform: 'none !important',
+      left: '0 !important',
+      top: '0 !important',
+      width: '100%',
+      marginTop: '5px',
+    }
+  },
+  // Styles for popper close
+  ...(!ownerState.open && {
+    pointerEvents: 'none',
+  }),
+}));
 
-const useStyles = makeStyles(styles);
+const StyledMenuItem = styled(MenuItem, {
+  shouldForwardProp: (prop) => prop !== 'hoverColor' && prop !== 'noLiPadding' && prop !== 'rtlActive',
+})(({ theme, ownerState }) => ({
+  // Define styles for dropdown items
+  ...{
+    color: theme.palette.text.primary,
+    '&:hover': {
+      backgroundColor: theme.palette[ownerState.hoverColor].main,
+      color: theme.palette.getContrastText(theme.palette[ownerState.hoverColor].main),
+    },
+    // Styles for hover color
+    ...(ownerState.hoverColor && {
+      '&:hover': {
+        backgroundColor: theme.palette[ownerState.hoverColor].main,
+        color: theme.palette.getContrastText(theme.palette[ownerState.hoverColor].main),
+      },
+    }),
+    // Styles for no li padding
+    ...(ownerState.noLiPadding && {
+      paddingTop: 0,
+      paddingBottom: 0,
+    }),
+    // Styles for RTL
+    ...(ownerState.rtlActive && {
+      textAlign: 'right',
+    }),
+  },
+}));
+
 
 export default function CustomDropdown(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -43,7 +120,7 @@ export default function CustomDropdown(props) {
     }
     setAnchorEl(null);
   };
-  const classes = useStyles();
+
   const {
     buttonText,
     buttonIcon,
@@ -57,45 +134,37 @@ export default function CustomDropdown(props) {
     rtlActive,
     noLiPadding
   } = props;
-  const caretClasses = classNames({
-    [classes.caret]: true,
-    [classes.caretActive]: Boolean(anchorEl),
-    [classes.caretRTL]: rtlActive
-  });
-  const dropdownItem = classNames({
-    [classes.dropdownItem]: true,
-    [classes[hoverColor + "Hover"]]: true,
-    [classes.noLiPadding]: noLiPadding,
-    [classes.dropdownItemRTL]: rtlActive
-  });
+
   let icon = null;
   switch (typeof buttonIcon) {
     case "object":
-      icon = <props.buttonIcon className={classes.buttonIcon} />;
+      icon = <props.buttonIcon />;
       break;
     case "string":
-      icon = <Icon className={classes.buttonIcon}>{props.buttonIcon}</Icon>;
+      icon = <Icon>{props.buttonIcon}</Icon>;
       break;
     default:
       icon = null;
       break;
   }
+
   return (
     <div>
       <div>
-        <Button
+        <StyledButton
           aria-label="Notifications"
           aria-owns={anchorEl ? "menu-list" : null}
           aria-haspopup="true"
           {...buttonProps}
           onClick={handleClick}
+          ownerState={{ open: Boolean(anchorEl), rtlActive, caret }}
         >
           {icon}
           {buttonText !== undefined ? buttonText : null}
-          {caret ? <b className={caretClasses} /> : null}
-        </Button>
+          {caret ? <b /> : null}
+        </StyledButton>
       </div>
-      <Popper
+      <StyledPopper
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         transition
@@ -109,10 +178,10 @@ export default function CustomDropdown(props) {
             ? "bottom-start"
             : "bottom"
         }
-        className={classNames({
-          [classes.popperClose]: !anchorEl,
-          [classes.popperResponsive]: true
-        })}
+        ownerState={{
+          open: Boolean(anchorEl),
+          popperResponsive: true
+        }}
       >
         {() => (
           <Grow
@@ -124,13 +193,12 @@ export default function CustomDropdown(props) {
                 : { transformOrigin: "0 0 0" }
             }
           >
-            <Paper className={classes.dropdown}>
+            <Paper>
               <ClickAwayListener onClickAway={handleCloseAway}>
-                <MenuList role="menu" className={classes.menuList}>
+                <MenuList role="menu">
                   {dropdownHeader !== undefined ? (
                     <MenuItem
                       onClick={() => handleClose(dropdownHeader)}
-                      className={classes.dropdownHeader}
                     >
                       {dropdownHeader}
                     </MenuItem>
@@ -141,18 +209,21 @@ export default function CustomDropdown(props) {
                         <Divider
                           key={key}
                           onClick={() => handleClose("divider")}
-                          className={classes.dropdownDividerItem}
                         />
                       );
                     }
                     return (
-                      <MenuItem
+                      <StyledMenuItem
                         key={key}
                         onClick={() => handleClose(prop)}
-                        className={dropdownItem}
+                        ownerState={{
+                          hoverColor,
+                          noLiPadding,
+                          rtlActive
+                        }}
                       >
                         {prop}
-                      </MenuItem>
+                      </StyledMenuItem>
                     );
                   })}
                 </MenuList>
@@ -160,7 +231,7 @@ export default function CustomDropdown(props) {
             </Paper>
           </Grow>
         )}
-      </Popper>
+      </StyledPopper>
     </div>
   );
 }
@@ -190,6 +261,5 @@ CustomDropdown.propTypes = {
   caret: PropTypes.bool,
   left: PropTypes.bool,
   noLiPadding: PropTypes.bool,
-  // function that retuns the selected item
   onClick: PropTypes.func
 };

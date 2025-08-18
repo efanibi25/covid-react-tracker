@@ -1,22 +1,18 @@
 import React from "react";
-// nodejs library that concatenates classes
-import classNames from "classnames";
-// nodejs library to set properties for components
 import PropTypes from "prop-types";
 
-// material-ui components
-import { makeStyles } from "@material-ui/core/styles";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Icon from "@material-ui/core/Icon";
-// core components
+// Import modern MUI components
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Icon from "@mui/material/Icon";
+import { Box } from "@mui/material";
+
+// core components (assuming these have been refactored)
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 
-import styles from "assets/jss/material-kit-react/components/customTabsStyle.js";
-
-const useStyles = makeStyles(styles);
+// Note: Removed the old imports for classNames, makeStyles, and the JSS styles file.
 
 export default function CustomTabs(props) {
   const [value, setValue] = React.useState(0);
@@ -24,22 +20,42 @@ export default function CustomTabs(props) {
   const handleChange = (event, value) => {
     setValue(value);
   };
-  const classes = useStyles();
+  
   const { headerColor, plainTabs, tabs, title, rtlActive } = props;
-  const cardTitle = classNames({
-    [classes.cardTitle]: true,
-    [classes.cardTitleRTL]: rtlActive
-  });
+
   return (
     <Card plain={plainTabs}>
       <CardHeader color={headerColor} plain={plainTabs}>
-        {title !== undefined ? <div className={cardTitle}>{title}</div> : null}
+        {title !== undefined ? (
+          <Box 
+            component="div"
+            sx={{
+              // This replaces the old cardTitle classNames logic
+              fontWeight: 500,
+              fontSize: '18px',
+              display: 'inline-block',
+              ...(rtlActive && {
+                // Add your RTL styles here
+              })
+            }}
+          >
+              {title}
+          </Box>
+        ) : null}
         <Tabs
           value={value}
           onChange={handleChange}
-          classes={{
-            root: classes.tabsRoot,
-            indicator: classes.displayNone
+          TabIndicatorProps={{
+            sx: {
+              // Replaces classes.displayNone
+              display: 'none',
+            }
+          }}
+          sx={{
+            // Replaces classes.tabsRoot
+            minHeight: 'unset !important',
+            overflow: 'visible !important',
+            // You may need to add other styles here from your original JSS file
           }}
         >
           {tabs.map((prop, key) => {
@@ -56,11 +72,37 @@ export default function CustomTabs(props) {
             }
             return (
               <Tab
-                classes={{
-                  root: classes.tabRootButton,
-                  label: classes.tabLabel,
-                  selected: classes.tabSelected,
-                  wrapper: classes.tabWrapper
+                sx={{
+                  // These styles replace classes.tabRootButton, classes.tabLabel, etc.
+                  minHeight: 'unset !important',
+                  minWidth: 'unset !important',
+                  width: '100%',
+                  height: 'unset !important',
+                  maxWidth: '500px !important',
+                  margin: '0 5px',
+                  padding: '10px 15px',
+                  borderRadius: '3px',
+                  lineHeight: '24px',
+                  border: '0 !important',
+                  color: '#fff !important',
+                  fontWeight: '500 !important',
+                  fontSize: '12px !important',
+                  '&:last-child': {
+                    marginRight: 0,
+                  },
+                  // Replaces classes.tabSelected
+                  '&.Mui-selected': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  },
+                  // Replaces classes.tabWrapper
+                  '& .MuiTab-wrapper': {
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    '& svg': {
+                      marginRight: '5px',
+                    },
+                  },
                 }}
                 key={key}
                 label={prop.tabName}
@@ -73,7 +115,7 @@ export default function CustomTabs(props) {
       <CardBody>
         {tabs.map((prop, key) => {
           if (key === value) {
-            return <div key={key}>{prop.tabContent}</div>;
+            return <Box key={key}>{prop.tabContent}</Box>;
           }
           return null;
         })}

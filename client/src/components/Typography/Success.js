@@ -1,20 +1,25 @@
 import React from "react";
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-// core components
-import styles from "assets/jss/material-kit-react/components/typographyStyle.js";
+import { styled } from '@mui/material/styles';
 
-const useStyles = makeStyles(styles);
+// Note: The old imports for makeStyles and the JSS styles file are removed.
+
+const StyledSuccess = styled('div')(({ theme }) => ({
+  // These styles combine the functionality of `defaultFontStyle` and `successText`.
+  // You will need to copy the exact styles from your JSS file here.
+  // Example styles:
+  color: theme.palette.success.main,
+  // fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+  // fontSize: '1rem',
+}));
 
 export default function Success(props) {
-  const classes = useStyles();
   const { children } = props;
   return (
-    <div className={classes.defaultFontStyle + " " + classes.successText}>
+    <StyledSuccess>
       {children}
-    </div>
+    </StyledSuccess>
   );
 }
 

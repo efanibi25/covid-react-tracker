@@ -2,25 +2,24 @@ import React from "react";
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
 
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
+// Import the modern Grid component
+import Grid from "@mui/material/Grid";
 
-const styles = {
-  grid: {
-    marginRight: "-15px",
-    marginLeft: "-15px",
-    width: "auto"
-  }
-};
-
-const useStyles = makeStyles(styles);
+// Note: The makeStyles import and the styles object are removed.
 
 export default function GridContainer(props) {
-  const classes = useStyles();
   const { children, className, ...rest } = props;
   return (
-    <Grid container {...rest} className={classes.grid + " " + className}>
+    <Grid
+      container
+      {...rest}
+      className={className}
+      sx={{
+        marginRight: "-15px",
+        marginLeft: "-15px",
+        width: "auto"
+      }}
+    >
       {children}
     </Grid>
   );

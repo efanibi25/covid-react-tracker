@@ -1,26 +1,42 @@
 import React from "react";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-// @material-ui/icons
-import Check from "@material-ui/icons/Check";
-import Warning from "@material-ui/icons/Warning";
-// core components
+import { Box } from '@mui/material';
+// @mui/icons-material
+import Check from "@mui/icons-material/Check";
+import Warning from "@mui/icons-material/Warning";
+// core components (assuming these are already refactored)
 import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 import Clearfix from "components/Clearfix/Clearfix.js";
 
-import styles from "assets/jss/material-kit-react/views/componentsSections/notificationsStyles.js";
-
-const useStyles = makeStyles(styles);
+// Note: Removed the old imports for makeStyles and the styles file.
 
 export default function SectionNotifications() {
-  const classes = useStyles();
   return (
-    <div className={classes.section} id="notifications">
-      <div className={classes.container}>
-        <div className={classes.title}>
+    <Box sx={{
+      // Replicates the old `classes.section` styles
+      padding: '70px 0',
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+    }}>
+      <Box sx={{
+        // Replicates the old `classes.container` styles
+        paddingRight: '15px',
+        paddingLeft: '15px',
+        marginRight: 'auto',
+        marginLeft: 'auto',
+        width: '100%',
+        zIndex: 12,
+        color: '#FFFFFF',
+      }}>
+        <Box sx={{
+          // Replicates the old `classes.title` styles
+          textAlign: "center",
+          marginBottom: "30px",
+          minHeight: "32px",
+          textDecoration: "none",
+        }}>
           <h3>Notifications</h3>
-        </div>
-      </div>
+        </Box>
+      </Box>
       <SnackbarContent
         message={
           <span>
@@ -66,6 +82,6 @@ export default function SectionNotifications() {
         icon="info_outline"
       />
       <Clearfix />
-    </div>
+    </Box>
   );
 }

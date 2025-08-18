@@ -1,67 +1,84 @@
 import React from "react";
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import Snack from "@material-ui/core/SnackbarContent";
-import IconButton from "@material-ui/core/IconButton";
-import Icon from "@material-ui/core/Icon";
-// @material-ui/icons
-import Close from "@material-ui/icons/Close";
-// core components
+import SnackbarContentMui from "@mui/material/SnackbarContent";
+import IconButton from "@mui/material/IconButton";
+import Icon from "@mui/material/Icon";
+import { Box } from "@mui/material";
 
-import styles from "assets/jss/material-kit-react/components/snackbarContentStyle.js";
+// @mui/icons-material
+import Close from "@mui/icons-material/Close";
 
-const useStyles = makeStyles(styles);
+// Note: Removed the old imports for makeStyles and the JSS styles file.
 
 export default function SnackbarContent(props) {
   const { message, color, close, icon } = props;
-  const classes = useStyles();
-  var action = [];
-  const closeAlert = () => {
-    setAlert(null);
+
+  // The sx prop is used to apply styles to the root and message of the SnackbarContent.
+  const rootSx = (theme) => ({
+    // Replicates the old root styles from your JSS file
+    position: 'relative',
+    padding: '20px 15px',
+    lineHeight: '20px',
+    marginBottom: '20px',
+    fontSize: '14px',
+    borderRadius: '3px',
+    boxShadow: '0 12px 20px -10px rgba(0, 0, 0, 0.2), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(0, 0, 0, 0.2)',
+    // Conditionally applies the color based on the `color` prop
+    backgroundColor: theme.palette[color].main,
+    color: '#fff',
+  });
+
+  // Styles for the message, replacing classes.message and classes.container
+  const messageSx = {
+    padding: '0 50px 0 0',
+    display: 'block',
   };
-  if (close !== undefined) {
-    action = [
-      <IconButton
-        className={classes.iconButton}
-        key="close"
-        aria-label="Close"
-        color="inherit"
-        onClick={closeAlert}
-      >
-        <Close className={classes.close} />
-      </IconButton>
-    ];
-  }
+
+  const action = close ? [
+    <IconButton
+      key="close"
+      aria-label="Close"
+      color="inherit"
+      onClick={props.onClose} // Assumes an `onClose` prop is passed from the parent
+      size="large"
+      sx={{
+        // Styles for the close button
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        padding: '9px',
+      }}
+    >
+      <Close sx={{ width: '1.2em', height: '1.2em' }} />
+    </IconButton>
+  ] : [];
+
   let snackIcon = null;
   switch (typeof icon) {
     case "object":
-      snackIcon = <props.icon className={classes.icon} />;
+      snackIcon = <Box component={icon} sx={{ width: '1.2em', height: '1.2em', marginRight: '5px' }} />;
       break;
     case "string":
-      snackIcon = <Icon className={classes.icon}>{props.icon}</Icon>;
+      snackIcon = <Icon sx={{ width: '1.2em', height: '1.2em', marginRight: '5px' }}>{icon}</Icon>;
       break;
     default:
       snackIcon = null;
       break;
   }
-  const [alert, setAlert] = React.useState(
-    <Snack
+
+  return (
+    <SnackbarContentMui
       message={
-        <div>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
           {snackIcon}
           {message}
-          {close !== undefined ? action : null}
-        </div>
+        </Box>
       }
-      classes={{
-        root: classes.root + " " + classes[color],
-        message: classes.message + " " + classes.container
-      }}
+      sx={rootSx}
+      action={action}
     />
   );
-  return alert;
 }
 
 SnackbarContent.propTypes = {

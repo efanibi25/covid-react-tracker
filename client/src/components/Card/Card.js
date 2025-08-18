@@ -1,32 +1,66 @@
 import React from "react";
-// nodejs library that concatenates classes
-import classNames from "classnames";
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-// @material-ui/icons
+// Import the modern styling utility and Box component
+import { Box, styled } from '@mui/material';
 
-// core components
-import styles from "assets/jss/material-kit-react/components/cardStyle.js";
+// Note: Removed old imports:
+// - classNames
+// - makeStyles
+// - styles (from assets/jss/...)
 
-const useStyles = makeStyles(styles);
+// ----------------------------------------------------
+// 1. REFACTOR STYLING WITH THE MODERN STYLED() UTILITY
+// ----------------------------------------------------
+
+const StyledCard = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'plain' && prop !== 'carousel',
+})(({ theme, ownerState }) => ({
+  // Define base card styles
+  borderRadius: '6px',
+  boxShadow: '0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12)',
+  display: 'inline-block',
+  position: 'relative',
+  width: '100%',
+  margin: '25px 0',
+  flexDirection: 'column',
+  minWidth: '0',
+  wordWrap: 'break-word',
+  fontSize: '.875rem',
+
+  // Conditionally apply styles for 'plain' prop
+  ...(ownerState.plain && {
+    background: 'transparent',
+    boxShadow: 'none',
+  }),
+
+  // Conditionally apply styles for 'carousel' prop
+  ...(ownerState.carousel && {
+    overflow: 'hidden',
+  }),
+}));
+
+// ----------------------------------------------------
+// 2. REFACTOR COMPONENT LOGIC
+// ----------------------------------------------------
 
 export default function Card(props) {
-  const classes = useStyles();
   const { className, children, plain, carousel, ...rest } = props;
-  const cardClasses = classNames({
-    [classes.card]: true,
-    [classes.cardPlain]: plain,
-    [classes.cardCarousel]: carousel,
-    [className]: className !== undefined
-  });
+
   return (
-    <div className={cardClasses} {...rest}>
+    <StyledCard 
+      className={className} 
+      ownerState={{ plain, carousel }}
+      {...rest}
+    >
       {children}
-    </div>
+    </StyledCard>
   );
 }
+
+// ----------------------------------------------------
+// 3. PROP TYPES (UNTOUCHED)
+// ----------------------------------------------------
 
 Card.propTypes = {
   className: PropTypes.string,

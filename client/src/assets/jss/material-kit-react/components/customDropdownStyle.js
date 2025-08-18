@@ -38,7 +38,7 @@ const customDropdownStyle = theme => ({
   },
   popperResponsive: {
     zIndex: "1200",
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down('md')]: {
       zIndex: "1640",
       position: "static",
       float: "none",

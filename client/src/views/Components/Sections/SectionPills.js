@@ -1,35 +1,57 @@
 import React from "react";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import { Box } from '@mui/material';
 
-// @material-ui/icons
-import Dashboard from "@material-ui/icons/Dashboard";
-import Schedule from "@material-ui/icons/Schedule";
-import List from "@material-ui/icons/List";
+// @mui/icons-material
+import Dashboard from "@mui/icons-material/Dashboard";
+import Schedule from "@mui/icons-material/Schedule";
+import List from "@mui/icons-material/List";
 
-// core components
+// core components (assuming these are already refactored)
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import NavPills from "components/NavPills/NavPills.js";
 
-import styles from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.js";
-
-const useStyles = makeStyles(styles);
+// Note: Removed the old imports for makeStyles and the styles file.
 
 export default function SectionPills() {
-  const classes = useStyles();
   return (
-    <div className={classes.section}>
-      <div className={classes.container}>
-        <div id="navigation-pills">
-          <div className={classes.title}>
+    <Box sx={{
+      // Replicates the old `classes.section` styles
+      padding: '70px 0',
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+    }}>
+      <Box sx={{
+        // Replicates the old `classes.container` styles
+        paddingRight: '15px',
+        paddingLeft: '15px',
+        marginRight: 'auto',
+        marginLeft: 'auto',
+        width: '100%',
+        zIndex: 12,
+        color: '#FFFFFF',
+      }}>
+        <Box id="navigation-pills">
+          <Box sx={{
+            // Replicates the old `classes.title` styles
+            textAlign: "center",
+            marginBottom: "30px",
+            minHeight: "32px",
+            textDecoration: "none",
+          }}>
             <h3>Navigation Pills</h3>
-          </div>
-          <div className={classes.title}>
+          </Box>
+          <Box sx={{
+            // Replicates the old `classes.title` styles
+            textAlign: "center",
+            marginBottom: "30px",
+            minHeight: "32px",
+            textDecoration: "none",
+          }}>
             <h3>
               <small>With Icons</small>
             </h3>
-          </div>
+          </Box>
           <GridContainer>
             <GridItem xs={12} sm={12} md={8} lg={6}>
               <NavPills
@@ -181,8 +203,8 @@ export default function SectionPills() {
               />
             </GridItem>
           </GridContainer>
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 }

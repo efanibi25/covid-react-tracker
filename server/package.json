@@ -1,7 +1,6 @@
 {
   "name": "react-express-app",
   "version": "1.0.0",
-  "proxy": "http://localhost:5000",
   "scripts": {
     "client": "npm start --prefix client",
     "server": "node server.js",
@@ -13,7 +12,7 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
-    "express": "^4.17.1",
+    "express": "^4.21.2",
     "flat-cache": "^3.0.4",
     "google-maps-react": "^2.0.6",
     "mongodb": "^3.6.9",

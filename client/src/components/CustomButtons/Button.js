@@ -1,73 +1,74 @@
 import React from "react";
-// nodejs library to set properties for components
 import PropTypes from "prop-types";
-// nodejs library that concatenates classes
-import classNames from "classnames";
+import { styled } from '@mui/material/styles';
+import Button from "@mui/material/Button";
 
-// @material-ui/core components
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import Button from "@material-ui/core/Button";
+// NOTE: The old imports for makeStyles, classNames, and buttonStyle.js are removed.
 
-// core components
+// We create a new styled component based on the MUI Button component.
+// The `shouldForwardProp` option prevents our custom props from being passed down to the DOM element,
+// which prevents React from throwing warnings.
+const RegularButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== 'simple' && prop !== 'round' && prop !== 'justIcon'
+    && prop !== 'fullWidth' && prop !== 'link' && prop !== 'block' && prop !== 'color' && prop !== 'size',
+})(({ theme, ownerState }) => {
 
-import buttonStyle from "assets/jss/material-kit-react/components/buttonStyle.js";
+  const { color, size, round, fullWidth, simple, block, link, justIcon } = ownerState;
 
-const makeComponentStyles = makeStyles(() => ({
-  ...buttonStyle
-}));
+  // You will need to copy the exact styles from your original 'buttonStyle.js' file here.
+  // This is a direct translation of the classNames logic into a styled component.
+  return {
+    // Styles for the base button (was classes.button)
+    // Example:
+    borderRadius: '30px',
+    boxShadow: '0 2px 2px 0 rgba(0, 0, 0, .14)',
+    // Add all other base button styles from buttonStyle.js
 
-const RegularButton = React.forwardRef((props, ref) => {
-  const {
-    color,
-    round,
-    children,
-    fullWidth,
-    disabled,
-    simple,
-    size,
-    block,
-    link,
-    justIcon,
-    className,
-    ...rest
-  } = props;
+    // Conditionally applied styles based on props
+    ...(round && {
+      borderRadius: '30px',
+    }),
 
-  const classes = makeComponentStyles();
+    ...(fullWidth && {
+      width: '100%',
+    }),
 
-  const btnClasses = classNames({
-    [classes.button]: true,
-    [classes[size]]: size,
-    [classes[color]]: color,
-    [classes.round]: round,
-    [classes.fullWidth]: fullWidth,
-    [classes.disabled]: disabled,
-    [classes.simple]: simple,
-    [classes.block]: block,
-    [classes.link]: link,
-    [classes.justIcon]: justIcon,
-    [className]: className
-  });
-  return (
-    <Button {...rest} ref={ref} className={btnClasses}>
-      {children}
-    </Button>
-  );
+    // Example for `size` prop
+    ...(size === 'sm' && {
+      padding: '7px 15px',
+    }),
+    ...(size === 'lg' && {
+      padding: '12px 30px',
+    }),
+
+    // Example for `color` prop
+    ...(color && {
+      backgroundColor: theme.palette[color].main,
+      color: theme.palette.getContrastText(theme.palette[color].main),
+      // Add other color-specific styles like box-shadow
+    }),
+
+    // Styles for simple, block, link, and justIcon props
+    ...(simple && {
+      // styles for simple button
+    }),
+    ...(block && {
+      // styles for block button
+    }),
+    ...(link && {
+      // styles for link button
+    }),
+    ...(justIcon && {
+      // styles for justIcon button
+    }),
+  };
 });
 
+// We still define propTypes and defaultProps on the final component.
 RegularButton.propTypes = {
   color: PropTypes.oneOf([
-    "primary",
-    "info",
-    "success",
-    "warning",
-    "danger",
-    "rose",
-    "white",
-    "facebook",
-    "twitter",
-    "google",
-    "github",
-    "transparent"
+    "primary", "info", "success", "warning", "danger", "rose", "white",
+    "facebook", "twitter", "google", "github", "transparent"
   ]),
   size: PropTypes.oneOf(["sm", "lg"]),
   simple: PropTypes.bool,

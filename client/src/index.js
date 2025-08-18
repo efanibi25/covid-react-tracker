@@ -1,24 +1,33 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import { createBrowserHistory } from "history";
-import { Router, Route, Switch } from "react-router-dom";
-
-
+import { createRoot } from "react-dom/client"; // Import createRoot
+import { createBrowserRouter, RouterProvider } from "react-router-dom"; // Import for React Router v6+
 
 // pages for this product
-import Components from "views/Components/Components.js";
-import newsPage from "views/newsPage/newsPage.js";
-import mapPage from "views/mapPage/mapPage.js";
-import tablePage from "views/tablePage/tablePage.js";
-var hist = createBrowserHistory();
+import NewsPage from "views/newsPage/newsPage.js";
+import MapPage from "views/mapPage/mapPage.js";
+import TablePage from "views/tablePage/tablePage.js";
 
-ReactDOM.render(
-  <Router history={hist}>
-    <Switch>
-      <Route path="/news" component={newsPage} />
-      <Route path="/tables" component={tablePage} />
-      <Route path="/" component={mapPage} />
-    </Switch>
-  </Router>,
-  document.getElementById("root")
+// Create a browser router for React Router v6+
+const router = createBrowserRouter([
+  {
+    path: "/news",
+    element: <NewsPage />,
+  },
+  {
+    path: "/tables",
+    element: <TablePage />,
+  },
+  {
+    path: "/",
+    element: <MapPage />,
+  },
+]);
+
+const rootElement = document.getElementById("root");
+const root = createRoot(rootElement);
+
+root.render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
 );

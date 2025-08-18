@@ -1,11 +1,10 @@
 import React from "react";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import Icon from "@material-ui/core/Icon";
-// @material-ui/icons
-import People from "@material-ui/icons/People";
-import Email from "@material-ui/icons/Email";
+import { Box, styled } from '@mui/material';
+import InputAdornment from "@mui/material/InputAdornment";
+import Icon from "@mui/material/Icon";
+// @mui/icons-material
+import People from "@mui/icons-material/People";
+import Email from "@mui/icons-material/Email";
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
@@ -16,30 +15,70 @@ import CardFooter from "components/Card/CardFooter.js";
 import Button from "components/CustomButtons/Button.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 
-import styles from "assets/jss/material-kit-react/views/componentsSections/loginStyle.js";
+// Note: Removed the old imports for makeStyles and the JSS styles file.
 
-const useStyles = makeStyles(styles);
+// A styled component for the form to handle its own styles
+const StyledForm = styled('form')({
+  margin: 0,
+});
 
 export default function SectionLogin() {
-  const classes = useStyles();
   return (
-    <div className={classes.section}>
-      <div className={classes.container}>
-        <GridContainer justify="center">
+    <Box sx={{
+      // Replicates the old `classes.section` styles
+      padding: '70px 0',
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+    }}>
+      <Box sx={{
+        // Replicates the old `classes.container` styles
+        paddingRight: '15px',
+        paddingLeft: '15px',
+        marginRight: 'auto',
+        marginLeft: 'auto',
+        width: '100%',
+        zIndex: 12,
+        color: '#FFFFFF',
+      }}>
+        <GridContainer justifyContent="center">
           <GridItem xs={12} sm={12} md={4}>
             <Card>
-              <form className={classes.form}>
-                <CardHeader color="primary" className={classes.cardHeader}>
+              <StyledForm>
+                <CardHeader
+                  color="primary"
+                  sx={{
+                    // Replicates the old `classes.cardHeader` styles
+                    width: 'auto',
+                    textAlign: 'center',
+                    marginLeft: '20px',
+                    marginRight: '20px',
+                    marginTop: '-40px',
+                    padding: '15px 0',
+                    boxShadow: '0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(156, 39, 176, 0.4)', // Example color
+                  }}
+                >
                   <h4>Login</h4>
-                  <div className={classes.socialLine}>
+                  <Box sx={{
+                    // Replicates the old `classes.socialLine` styles
+                    marginTop: '1rem',
+                    textAlign: 'center',
+                  }}>
                     <Button
                       justIcon
                       href="#pablo"
                       target="_blank"
                       color="transparent"
                       onClick={e => e.preventDefault()}
+                      sx={{
+                        // Replicates the old `classes.socialIcons` styles
+                        margin: '0 5px',
+                        '& .fab': {
+                          fontSize: '20px',
+                          verticalAlign: 'middle',
+                        },
+                      }}
                     >
-                      <i className={classes.socialIcons + " fab fa-twitter"} />
+                      <Box component="i" className={"fab fa-twitter"} />
                     </Button>
                     <Button
                       justIcon
@@ -47,8 +86,15 @@ export default function SectionLogin() {
                       target="_blank"
                       color="transparent"
                       onClick={e => e.preventDefault()}
+                      sx={{
+                        margin: '0 5px',
+                        '& .fab': {
+                          fontSize: '20px',
+                          verticalAlign: 'middle',
+                        },
+                      }}
                     >
-                      <i className={classes.socialIcons + " fab fa-facebook"} />
+                      <Box component="i" className={"fab fa-facebook"} />
                     </Button>
                     <Button
                       justIcon
@@ -56,16 +102,28 @@ export default function SectionLogin() {
                       target="_blank"
                       color="transparent"
                       onClick={e => e.preventDefault()}
+                      sx={{
+                        margin: '0 5px',
+                        '& .fab': {
+                          fontSize: '20px',
+                          verticalAlign: 'middle',
+                        },
+                      }}
                     >
-                      <i
-                        className={
-                          classes.socialIcons + " fab fa-google-plus-g"
-                        }
-                      />
+                      <Box component="i" className={"fab fa-google-plus-g"} />
                     </Button>
-                  </div>
+                  </Box>
                 </CardHeader>
-                <p className={classes.divider}>Or Be Classical</p>
+                <Box sx={{
+                  // Replicates the old `classes.divider` styles
+                  marginTop: '1.25rem',
+                  marginBottom: '1rem',
+                  textAlign: 'center',
+                  fontSize: '12px',
+                  position: 'relative',
+                }}>
+                  Or Be Classical
+                </Box>
                 <CardBody>
                   <CustomInput
                     labelText="First Name..."
@@ -77,7 +135,12 @@ export default function SectionLogin() {
                       type: "text",
                       endAdornment: (
                         <InputAdornment position="end">
-                          <People className={classes.inputIconsColor} />
+                          <People 
+                            sx={{
+                              // Replicates the old `classes.inputIconsColor`
+                              color: "#E0E0E0",
+                            }}
+                          />
                         </InputAdornment>
                       )
                     }}
@@ -92,7 +155,12 @@ export default function SectionLogin() {
                       type: "email",
                       endAdornment: (
                         <InputAdornment position="end">
-                          <Email className={classes.inputIconsColor} />
+                          <Email 
+                            sx={{
+                              // Replicates the old `classes.inputIconsColor`
+                              color: "#E0E0E0",
+                            }}
+                          />
                         </InputAdornment>
                       )
                     }}
@@ -107,7 +175,12 @@ export default function SectionLogin() {
                       type: "password",
                       endAdornment: (
                         <InputAdornment position="end">
-                          <Icon className={classes.inputIconsColor}>
+                          <Icon 
+                            sx={{
+                              // Replicates the old `classes.inputIconsColor`
+                              color: "#E0E0E0",
+                            }}
+                          >
                             lock_outline
                           </Icon>
                         </InputAdornment>
@@ -116,16 +189,20 @@ export default function SectionLogin() {
                     }}
                   />
                 </CardBody>
-                <CardFooter className={classes.cardFooter}>
+                <CardFooter sx={{
+                  // Replicates the old `classes.cardFooter` styles
+                  padding: '0.9375rem 1.875rem',
+                  paddingTop: 0,
+                }}>
                   <Button simple color="primary" size="lg">
                     Get started
                   </Button>
                 </CardFooter>
-              </form>
+              </StyledForm>
             </Card>
           </GridItem>
         </GridContainer>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
