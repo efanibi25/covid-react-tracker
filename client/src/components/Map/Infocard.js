@@ -1,142 +1,145 @@
-import React , { useContext ,useState ,useEffect,Fragment}from "react";
-import { dataContext } from "../../views/mapPage/mapPage.js";
-//Card (Assuming these have been refactored to use modern MUI)
+import React, { useContext, useState, useEffect } from "react";
+import { DataContext } from "../../index.js";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
-//icons
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Box } from '@mui/material';
 
-// Note: Removed the old makeStyles import and the styles object.
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5400";
+
+// Helper function to format dates consistently
+function formatDate(dateString) {
+  if (!dateString) return '';
+  const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+  return new Date(dateString).toLocaleDateString('en-US', options);
+}
 
 export default function Infocard(props) {
-  const [countyCases, setCountyCases] = useState({});
-  const [countyDeaths, setCountyDeaths] = useState({});
-  const [stateData, setStateData] = useState({});
-  const [countyPop, setCountyPop] = useState("");
-  const [stateVacc, setStateVacc] = useState("");
-  const [countyVacc, setCountyVacc] = useState("");
+  // Use null as the initial state to clearly represent "loading"
+  const [latestCountyCases, setLatestCountyCases] = useState(null);
+  const [latestCountyDeaths, setLatestCountyDeaths] = useState(null);
+  const [stateData, setStateData] = useState(null);
+  const [countyPopData, setCountyPopData] = useState(null);
+  const [latestStateVacc, setLatestStateVacc] = useState(null);
+  const [latestCountyVacc, setLatestCountyVacc] = useState(null);
+  const [statePopData, setStatePopData] = useState(null);
 
-  const context = useContext(dataContext);
-
-  const today = new Date();
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
-  today.toLocaleDateString('en-CA');
-  yesterday.toLocaleDateString('en-CA');
-  
+  const context = useContext(DataContext);
   const [isExpanded, setIsExpanded] = useState(true);
 
-  function handleclick(event){
+  function handleclick() {
     setIsExpanded(!isExpanded);
   }
-    
-  async function getCasesCounty(state,county){
-    const cases_resp=await fetch(`/api/county_cases?start=${yesterday}&end=${today}&state=${state}&county=${county}`);
-    if (cases_resp.status !== 200){
-      setCountyCases({ error: "Error Retriving Case Data for County" });
-      return;
+
+  // --- Data Fetching Functions ---
+  
+  async function getLatestCountyCases(state, county) {
+    try {
+      const resp = await fetch(`${API_BASE_URL}/api/latest_county_cases?state=${state}&county=${county}`);
+      if (!resp.ok) throw new Error("Network response failed");
+      const data = await resp.json();
+      setLatestCountyCases(Object.keys(data).length > 0 ? data : { error: "No Data" });
+    } catch (error) {
+      setLatestCountyCases({ error: "Fetch Error" });
     }
-    const cases_dict = await cases_resp.json();
-    if(cases_dict.length === 0){
-      setCountyCases({ error: "No Data on Cases Found" });
-      return;
-    }
-    setCountyCases(cases_dict[0]);
   }
 
-  async function getDeathsCounty(state,county){
-    const death_resp=await fetch(`/api/county_deaths?start=${yesterday}&end=${today}&state=${state}&county=${county}`);
-    if (death_resp.status !== 200){
-      setCountyDeaths({ error: "Error Retriving Death Data for County" });
-      return;
+  async function getLatestCountyDeaths(state, county) {
+    try {
+      const resp = await fetch(`${API_BASE_URL}/api/latest_county_deaths?state=${state}&county=${county}`);
+      if (!resp.ok) throw new Error("Network response failed");
+      const data = await resp.json();
+      setLatestCountyDeaths(Object.keys(data).length > 0 ? data : { error: "No Data" });
+    } catch (error) {
+      setLatestCountyDeaths({ error: "Fetch Error" });
     }
-    const death_dict = await death_resp.json();
-    if(death_dict.length === 0){
-      setCountyDeaths({ error: "No Data on Deaths Found" });
-      return;
+  }
+  
+  async function getLatestStateVacc(state) {
+    try {
+      const resp = await fetch(`${API_BASE_URL}/api/latest_state_vacc?state=${state}`);
+      if (!resp.ok) throw new Error("Network response failed");
+      const data = await resp.json();
+      setLatestStateVacc(data);
+    } catch (error) {
+      setLatestStateVacc({ error: "Fetch Error" });
     }
-    setCountyDeaths(death_dict[0]);
   }
 
-  async function getstatedata(state){
-    const state_resp=await fetch(`/api/state_data?start=${today}&state=${state}`);
-    if (state_resp.status !== 200){
-      setStateData({ error: "Error Retriving State Data" });
-      return;
+  async function getLatestCountyVacc(county, state) {
+    try {
+      const resp = await fetch(`${API_BASE_URL}/api/latest_county_vacc?state=${state}&county=${county}`);
+      if (!resp.ok) throw new Error("Network response failed");
+      const data = await resp.json();
+      setLatestCountyVacc(Object.keys(data).length > 0 ? data : { error: "No Data" });
+    } catch (error) {
+      setLatestCountyVacc({ error: "Fetch Error" });
     }
-    const state_dict = await state_resp.json();
-    if(Object.keys(state_dict).length === 0){
-      setStateData({ error: "No Data Found" });
-      return;
-    }
-    setStateData(state_dict[Object.keys(state_dict)[0]]);
   }
 
-  async function getCountyPop(state,county){
-    const pop_resp=await fetch(`/api/county_pop?&state=${state}&county=${county}`);
-    if (pop_resp.status !== 200){
-      setCountyPop("Error Getting Data");
-      return;
+  async function getStateData(state) {
+    try {
+      const resp = await fetch(`${API_BASE_URL}/api/state_data?state=${state}`);
+      if (!resp.ok) throw new Error("Network response failed");
+      const data = await resp.json();
+      setStateData(Object.keys(data).length > 0 ? data : { error: "No Data" });
+    } catch (error) {
+      setStateData({ error: "Fetch Error" });
     }
-    const pop = await pop_resp.json();
-    if(pop.length === 0){
-      setCountyPop("No Data on Pop Found");
-      return;
-    }
-    setCountyPop(pop[0]);
   }
 
-  async function getCountyVacc(county,state){
-    const county_resp=await fetch(`/api/county_vacc?county=${county}&state=${state}&today`);
-    if (county_resp.status!== 200){
-      setCountyVacc("Error Getting Data");
-      return;
+  async function getCountyPop(state, county) {
+    try {
+      const resp = await fetch(`${API_BASE_URL}/api/county_pop?state=${state}&county=${county}`);
+      if (!resp.ok) throw new Error("Network response failed");
+      const data = await resp.json();
+      setCountyPopData(Object.keys(data).length > 0 ? data : { error: "No Data" });
+    } catch (error) {
+      setCountyPopData({ error: "Fetch Error" });
     }
-    const county_vacc = await county_resp.json();
-    if(county_vacc.length === 0 || county_vacc[0]['error']){
-      setCountyVacc("No Data on Vaccines Found");
-      return;
-    }
-    setCountyVacc(county_vacc[0]["count"]);
   }
 
-  async function getStateVacc(state){
-    const state_resp=await fetch(`/api/state_vacc?state=${state}&today`);
-    if (state_resp.status!== 200){
-      setStateVacc("Error Getting Data");
-      return;
+  async function getStatePop(state) {
+    try {
+      const resp = await fetch(`${API_BASE_URL}/api/state_pop?state=${state}`);
+      if (!resp.ok) throw new Error("Network response failed");
+      const data = await resp.json();
+      setStatePopData(data);
+    } catch (error) {
+      setStatePopData({ error: "Fetch Error" });
     }
-    const state_vacc = await state_resp.json();
-    if(state_vacc.length === 0 || state_vacc[0]['error']){
-      setStateVacc("No Data on Vaccinations Found");
-      return;
-    }
-    let count=0;
-    for(let i=0;i<state_vacc.length;i++){
-      count=count+state_vacc[i]["count"];
-    }
-    setStateVacc(count);
   }
 
   useEffect(() => {
-    if (context.address["state"]==null || context.address["county"]==null){
-      return;
-    }
-    setIsExpanded(true);
-    let state=context.address["state"];
-    let county=context.address["county"];
+    (async () => {
+      if (!context.address || !context.address.state || !context.address.county) {
+        return;
+      }
+      // Reset all states to null on new address to show loading indicators
+      setLatestCountyCases(null);
+      setLatestCountyDeaths(null);
+      setStateData(null);
+      setCountyPopData(null);
+      setLatestStateVacc(null);
+      setLatestCountyVacc(null);
+      setStatePopData(null);
+      setIsExpanded(true);
 
-    getDeathsCounty(state,county);
-    getCasesCounty(state,county);
-    getCountyPop(state,county);
-    getstatedata(state);
-    getCountyVacc(county,state);
-    getStateVacc(state);
+      const { state, county } = context.address;
+      
+      // Fire all API calls
+      getLatestCountyCases(state, county);
+      getLatestCountyDeaths(state, county);
+      getCountyPop(state, county);
+      getLatestCountyVacc(county, state);
+      getStateData(state);
+      getLatestStateVacc(state);
+      getStatePop(state);
+    })();
   }, [context.address]);
 
-  if(!context.card) {
+  if (!context.card) {
     return null;
   } else {
     return (
@@ -144,53 +147,52 @@ export default function Infocard(props) {
         <CardBody>
           <Box sx={{ fontSize: "22px" }}>
             <b>{"Covid Statistics"}</b>
-            <Box 
-              component="span"
-              sx={{ marginLeft:"45px" }}
-              onClick={handleclick}
-            >
+            <Box component="span" sx={{ marginLeft: "45px" }} onClick={handleclick}>
               {isExpanded ? <RemoveIcon /> : <AddIcon />}
             </Box>
           </Box>
           <Box sx={{ display: isExpanded ? "block" : "none" }}>
-            <u><b style={{ fontSize: "15px" }}>{context.address["county"]}</b></u>
+            <u><b style={{ fontSize: "15px" }}>County: {countyPopData?.county_name || context.address.county}</b></u>
             <Box>
-              <b style={{ fontSize: "15px" }}>County Pop</b>:{countyPop}
+              <b style={{ fontSize: "15px" }}>County Pop</b>: 
+              {countyPopData === null ? " Loading..." : countyPopData.error ? ` ${countyPopData.error}` : ` ${countyPopData.population?.toLocaleString()}`}
             </Box>
             <Box>
-              {countyCases.error ? <div><b style={{fontSize:"15px"}}>{countyCases.error}</b></div> : (
+              {latestCountyCases === null ? " Loading..." : latestCountyCases.error ? ` Cases: ${latestCountyCases.error}` : (
                 <>
-                  <div><b style={{ fontSize: "15px" }}>{"County Case Data Updated: "}</b>{countyCases.date}</div>
-                  <div><b style={{ fontSize: "15px" }}>{"Latest Case Count: "}</b>{countyCases.cases}</div>
-                  <div><b style={{ fontSize: "15px" }}>{"One-Day Change in Cases: "}</b>{countyCases.newcases}</div>
+                  <div><b style={{ fontSize: "15px" }}>{"Cases (As of): "}</b>{formatDate(latestCountyCases.date)}</div>
+                  <div><b style={{ fontSize: "15px" }}>{"Total Cases: "}</b>{latestCountyCases.cases?.toLocaleString()}</div>
                 </>
               )}
             </Box>
-            <br />
-            {countyDeaths.error ? <div><b style={{fontSize:"15px"}}>{countyDeaths.error}</b></div> : (
-              <>
-                <div><b style={{ fontSize: "15px" }}>{"County Death Data Updated: "}</b>{countyDeaths.date}</div>
-                <div><b style={{ fontSize: "15px" }}>{"Death Count: "}</b>{countyDeaths.deaths}</div>
-                <div><b style={{ fontSize: "15px" }}>{"One-Day Change in Deaths: "}</b>{countyDeaths.newdeaths}</div>
-              </>
-            )}
-            <br />
             <Box>
-              <b style={{ fontSize: "15px" }}>County Vaccinations</b>:{countyVacc}
+              {latestCountyDeaths === null ? " Loading..." : latestCountyDeaths.error ? ` Deaths: ${latestCountyDeaths.error}` : (
+                <>
+                  <div><b style={{ fontSize: "15px" }}>{"Deaths (As of): "}</b>{formatDate(latestCountyDeaths.date)}</div>
+                  <div><b style={{ fontSize: "15px" }}>{"Total Deaths: "}</b>{latestCountyDeaths.deaths?.toLocaleString()}</div>
+                </>
+              )}
+            </Box>
+            <Box>
+              <b style={{ fontSize: "15px" }}>County Vaccinations</b>: 
+              {latestCountyVacc === null ? " Loading..." : latestCountyVacc.error ? ` ${latestCountyVacc.error}`: ` ${latestCountyVacc.count?.toLocaleString()}`}
             </Box>
             <br />
-            <u><b style={{ fontSize: "15px" }}>{context.address["state"]}</b></u>
-            {stateData.error ? <div><b style={{fontSize:"15px"}}>{stateData.error}</b></div> : (
+            <u><b style={{ fontSize: "15px" }}>State: {statePopData?._id || context.address.state}</b></u>
+            <Box>
+              <b style={{ fontSize: "15px" }}>State Pop</b>: 
+              {statePopData === null ? " Loading..." : statePopData.error ? ` ${statePopData.error}` : ` ${statePopData.total_population?.toLocaleString()}`}
+            </Box>
+            {stateData === null ? " Loading..." : stateData.error ? ` State Data: ${stateData.error}` : (
               <>
-                <div><b style={{ fontSize: "15px" }}>{"State Data Updated: "}</b>{Object.keys(stateData)[0]}</div>
-                <div><b style={{ fontSize: "15px" }}>{"Case Count: "}</b>{stateData["tot_cases"]}</div>
-                <div><b style={{ fontSize: "15px" }}>{"One-Day Change in Cases: "}</b>{stateData["new_case"]}</div>
-                <div><b style={{ fontSize: "15px" }}>{"Death Count: "}</b>{stateData["tot_death"]}</div>
-                <div><b style={{ fontSize: "15px" }}>{"One-Day Change in Deaths: "}</b>{stateData["new_death"]}</div>
+                <div><b style={{ fontSize: "15px" }}>{"State Data (Weekly): "}</b>{formatDate(stateData.end_date)}</div>
+                <div><b style={{ fontSize: "15px" }}>{"Total Cases: "}</b>{stateData.tot_cases?.toLocaleString()}</div>
+                <div><b style={{ fontSize: "15px" }}>{"Total Deaths: "}</b>{stateData.tot_death?.toLocaleString()}</div>
               </>
             )}
             <Box>
-              <b style={{ fontSize: "15px" }}>State Vaccinations</b>:{stateVacc}
+              <b style={{ fontSize: "15px" }}>State Vaccinations</b>: 
+              {latestStateVacc === null ? " Loading..." : latestStateVacc.error ? ` ${latestStateVacc.error}` : ` ${latestStateVacc.total_vaccinations?.toLocaleString()}`}
             </Box>
           </Box>
         </CardBody>

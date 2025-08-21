@@ -1,51 +1,58 @@
-import React , { useContext ,useState ,useEffect, Fragment}from "react";
-import { Box } from '@mui/material'; // Import Box for modern styling
+// src/views/mapPage/mapPage.js
 
-import Map from 'components/Map/Map.js';
-import Places from 'components/Map/Places.js';
-import Infocard from 'components/Map/Infocard.js';
-//appbar
-import MenuBar from 'views/Components/MenuBar';
-
-// Note: The old `makeStyles` hook and the JSS style file have been removed.
-// We will use the `sx` prop on components directly for styling.
-
-export const dataContext = React.createContext();
-document.body.style.background="#ececec"
+import React, { useState,useContext } from "react";
+import { Box, CssBaseline, createTheme, ThemeProvider } from '@mui/material';
+import { useJsApiLoader } from '@react-google-maps/api'; // Keep loader here
 
 
-function App() {
-  const [address, setAddress] = useState({});
-  const [location, setLocation] = useState({
-    lat: 39.50,
-    lng: -98.35
-  });
-  const [zoom, setZoom] = useState(5);
-  const [card, setCard] = useState(false);
-  let shared={address,setAddress,location,setLocation,zoom,setZoom,card,setCard}
+// ✅ Import the CHILD components
+import Map from '../../components/Map/Map.js';
+import Infocard from '../../components/Map/Infocard.js';
+import MenuBar from '../../components/Shared/Components/MenuBar.js';
+import PlacesSearch from '../../components/Shared/PlaceSearch.js'; 
+import { DataContext } from "../../index.js";
 
-  // NOTE: The link-forwarding functions (newsLink, etc.) were not used in the JSX and have been removed.
 
-  return(
-    <Fragment>
-      <MenuBar/>
-      {/* This Box component replaces the old div that used `classes.toolbar`. */}
-      <Box sx={(theme) => ({
-        ...theme.mixins.toolbar, // This applies the correct toolbar styles
-      })} />
-      <dataContext.Provider value={shared}>    
-        <Places/>
-        <Map/>
-        {/* The style prop on Infocard has been converted to the modern sx prop. */}
-        <Infocard sx={{
-          width: '35%',
-          top: '10%',
-          position: 'absolute',
-          left: '55%',
-          backgroundColor: 'White'
-        }} />
-      </dataContext.Provider>
-    </Fragment>
-  )
+const theme = createTheme({
+  palette: {
+    background: {
+      default: "#ececec"
+    },
+  },
+});
+
+export default function MapPage() {
+  // ✅ This is the ONE and ONLY script loader for this pag
+  let context = useContext(DataContext);
+
+
+
+
+  // ✅ This check prevents child components from rendering too early, solving the bug
+  if (!context.isLoaded) {
+    return <div>Loading Map...</div>;
+  }
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+        <MenuBar />
+        <Box sx={{ ...theme.mixins.toolbar }} />
+
+        <Box sx={{ position: 'relative', height: 'calc(100vh - 64px)' }}>
+          <PlacesSearch sx={{
+            position: 'absolute',
+            top: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: 'clamp(300px, 40vw, 500px)',
+            zIndex: 10,
+            backgroundColor: 'white'
+          }} />
+
+          <Map />
+         
+          {context.card && <Infocard />}
+        </Box>
+    </ThemeProvider>
+  );
 }
-export default App;

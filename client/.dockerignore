@@ -1,0 +1,9 @@
+# .dockerignore
+
+# Exclude node_modules to avoid copying it into the image
+node_modules
+
+# Other files to ignore
+npm-debug.log
+.git
+.gitignore

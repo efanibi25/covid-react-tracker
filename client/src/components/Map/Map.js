@@ -1,43 +1,23 @@
-
-
-
-import usePlacesAutocomplete from "use-places-autocomplete";
-import React , { useContext ,useState ,useEffect,Fragment,router, isValidElement}from "react";
+import React, { useContext, Fragment } from "react";
 import GoogleMapReact from 'google-map-react';
-import { dataContext } from "../../views/mapPage/mapPage.js";
+import { DataContext } from "../../index.js";
 
 export default function Maps(props) {
-  const  context = useContext(dataContext);
-  const [address, setAddress] = useState([]);
-  const {
-    ready,
-    value,
-    suggestions: { status, data },
-    setValue,
-    clearSuggestions,
-  } = usePlacesAutocomplete({
-    requestOptions: {
-      /* Define search scope here */
-      types: ['(cities)'],
-      componentRestrictions: { country: ["us"]},
-    },
-    debounce: 300,
-  });
- 
+  const context = useContext(DataContext);
 
-  return (
-    <Fragment>
-    <div style={{ height: '80vh', width: '100%' }}>
+  // The Maps component now only cares about receiving location and zoom from the context.
+  // All the search logic and state have been removed.
+
+return (
+  <div style={{ height: '100%', width: '100%' }}>
     <GoogleMapReact
-    bootstrapURLKeys={{ key:"AIzaSyDHoseXyoZyn8G9Kq2DdW3E0XydPPd84S4" }}
-    center={context.location}
-    zoom={context.zoom}
-
-
-  >
-   </GoogleMapReact>
-   </div>
-    </Fragment>
-  );
+      // bootstrapURLKeys prop has been REMOVED
+      center={context.location}
+      zoom={context.zoom}
+    >
+      {/* ... */}
+    </GoogleMapReact>
+  </div>
+);
 }
 
