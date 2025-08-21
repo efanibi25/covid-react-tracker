@@ -1,61 +1,53 @@
 import React, { useContext, useState, useEffect, Fragment } from "react";
-import { dataContext } from "../../views/tablePage/tablePage.js";
-import LinearProgress from '@mui/material/LinearProgress';
-import Grid from '@mui/material/Grid';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box'; // Import Box for modern responsive styling
+import { DataContext } from "../../index.js";
+import { styled, useTheme, useMediaQuery, Box, Button, Grid, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 
-// Note: Removed the makeStyles import and hook
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5400";
 
 export default function StateTable(props) {
-  let context = useContext(dataContext);
+  const context = useContext(DataContext);
+  const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
+  const [loading, setLoading] = useState(true);
 
-  const [table, setTable] = useState(false);
-  const [loaded, setLoaded] = useState(false);
-  const [buttonText, setButtonText] = useState("Switch to County");
-
-  function createData(date, deaths, deathsone, cases, casesone, vaccine) {
-    return { date, deaths, deathsone, cases, casesone, vaccine };
+  // This function can stay as it is.
+  function createData(date, deaths, deathsone, cases, casesone) {
+    return { date, deaths, deathsone, cases, casesone };
   }
+  
+  // REVISED: Combined data fetching into a single, robust function.
+  async function fetchData(state) {
+    setLoading(true);
+    try {
+      // 1. Fetch the main aggregated table data
+      const tableUrl = `${API_BASE_URL}/api/state_data_aggregated?state=${state}`;
+      const tableResp = await fetch(tableUrl);
+      if (!tableResp.ok) throw new Error('Failed to fetch state table data');
+      
+      const tableData = await tableResp.json();
+      const formattedTableData = tableData.map(d => 
+        createData(d.date, d.deaths, d.new_deaths, d.cases, d.new_cases)
+      );
+      context.setStateData(formattedTableData);
 
-  async function create_table(state, county) {
-    let state_dict = [];
-    let state_resp = await fetch(`/api/state_data?state=${state}&date=all`);
+      // 2. Fetch the LATEST state vaccine total using the correct endpoint
+      const vaccUrl = `${API_BASE_URL}/api/latest_state_vacc?state=${state}`;
+      const vaccResp = await fetch(vaccUrl);
+      if (!vaccResp.ok) throw new Error('Failed to fetch state vaccine data');
+      
+      const vaccData = await vaccResp.json();
+      // The API now returns the final total directly, no calculation needed.
+      context.setStateVacc(vaccData.total_vaccinations);
 
-    if (state_resp.status == 200) {
-      state_dict = await state_resp.json();
+    } catch (error) {
+      console.error("Error fetching state data:", error);
+      // Set an error state or clear data on failure
+      context.setStateData([]);
+      context.setStateVacc(0);
+    } finally {
+      // This will run whether the fetch succeeds or fails.
+      setLoading(false);
     }
-
-    let keys = Object.keys(state_dict);
-    keys = keys.sort();
-    let temp = [];
-    for (let i = keys.length - 1; i > -1; i--) {
-      let key = keys[i];
-      let data = state_dict[key];
-      let t = createData(key, data["tot_death"], data["new_death"], data["tot_cases"], data["new_case"]);
-      temp.push(t);
-    }
-    context.setStateData(temp);
-  }
-
-  async function getStateVacc(state) {
-    let statevacc_dict = [];
-    let url = `/api/state_vacc?state=${state}&today`;
-    let statevacc_resp = await fetch(url);
-    if (statevacc_resp.status == 200) {
-      statevacc_dict = await statevacc_resp.json();
-    }
-    let count = 0;
-    for (let i = 0; i < statevacc_dict.length; i++) {
-      count = count + statevacc_dict[i]["count"];
-    }
-    context.setStateVacc(count);
   }
 
   function handleclick() {
@@ -63,120 +55,57 @@ export default function StateTable(props) {
   }
 
   useEffect(() => {
-    if (context.address["state"] == null || context.address["county"] == null) {
-      return;
+    if (context.address?.state) {
+      fetchData(context.address.state);
     }
-    let state = context.address["state"];
-    let county = context.address["county"];
-    create_table(state, county);
-    getStateVacc(state);
-  }, []);
+  }, [context.address?.state]);
+  
 
-  useEffect(() => {
-    if (context.statedata.length > 0 && context.statevacc)
-      setLoaded(true);
-  }, [context.statedata, context.state_pop, context.statevacc]);
-
-  useEffect(() => {
-    if (loaded) {
-      setTable(true);
-    }
-  }, [loaded]);
-
-  if (table == false) {
-    return (
-      <LinearProgress />
-    );
+  if (loading) {
+    return <LinearProgress />;
   } else {
     return (
       <Fragment>
-        <Grid container
-          justifyContent="center"
-          direction="row"
-        >
-
-          {/* This Box replaces the deprecated <Hidden mdDown> */}
-          <Box sx={{ display: { xs: 'none', md: 'block' } }}>
-            <Grid container item xs={4} justifyContent='center'>
-              <b style={{ fontSize: "40px", marginLeft: "20%" }}>{context.address["state"]} </b>
-            </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                onClick={handleclick}
-                size="small"
-                // The sx prop replaces the old classes prop
-                sx={{
-                  gridColumnStart: 3,
-                  gridRowStart: 1,
-                  width: "40%",
-                  color: "white",
-                  backgroundColor: "#442bce",
-                  "& .MuiButton-label": { // Targets the inner label
-                    fontSize: "8px"
-                  }
-                }}
-              >
-                Switch to County
-              </Button>
-            </Grid>
-            <Grid item container xs={10} justifyContent='center'>
-              <b style={{ fontSize: "40px" }}>State Fully Vaccinated: {context.statevacc} </b>
-            </Grid>
+        <Grid container justifyContent="center" direction="column" alignItems="center">
+          <Box sx={{ width: '80%', textAlign: 'center' }}>
+            {/* Using a single responsive header block */}
+            <Typography variant={isMdUp ? "h4" : "h6"} gutterBottom>
+              {context.address.state}
+            </Typography>
+            <Button
+              variant="contained"
+              onClick={handleclick}
+              size={isMdUp ? "medium" : "small"}
+              sx={{ mt: 1, mb: 2, backgroundColor: "#442bce", color: "white" }}
+            >
+              Switch to County
+            </Button>
+            <Typography variant={isMdUp ? "h5" : "subtitle1"} sx={{ mb: 2 }}>
+              {/* Added number formatting for readability */}
+              State Fully Vaccinated: {context.statevacc?.toLocaleString() || 'N/A'}
+            </Typography>
           </Box>
 
-          {/* This Box replaces the deprecated <Hidden mdUp> */}
-          <Box sx={{ display: { xs: 'block', md: 'none' } }}>
-            <Grid container item xs={4} justifyContent='center'>
-              <b style={{ fontSize: "20px" }}>{context.address["state"]} </b>
-            </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                onClick={handleclick}
-                size="small"
-                // The sx prop replaces the old classes prop
-                sx={{
-                  gridColumnStart: 3,
-                  gridRowStart: 1,
-                  width: "40%",
-                  color: "white",
-                  backgroundColor: "#442bce",
-                  "& .MuiButton-label": {
-                    fontSize: "8px"
-                  }
-                }}
-              >
-                Switch to County
-              </Button>
-            </Grid>
-            <Grid item container xs={10} justifyContent='center'>
-              <b style={{ fontSize: "20px" }}>State Fully Vaccinated: {context.statevacc} </b>
-            </Grid>
-          </Box>
-
-          <Grid item container justifyContent='center' xs={8}>
-            <TableContainer style={{ "gridColumn": "2/2" }}>
+          <Grid item xs={12} md={8}>
+            <TableContainer>
               <Table>
                 <TableHead>
                   <TableRow>
                     <TableCell>Date</TableCell>
-                    <TableCell align="left">Deaths</TableCell>
-                    <TableCell align="left">One-Day Change Deaths</TableCell>
-                    <TableCell align="left">Cases</TableCell>
-                    <TableCell align="left">One-Day Change Cases</TableCell>
+                    <TableCell align="left">Total Deaths</TableCell>
+                    <TableCell align="left">New Deaths</TableCell>
+                    <TableCell align="left">Total Cases</TableCell>
+                    <TableCell align="left">New Cases</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {context.statedata.map((val, index) => (
-                    <TableRow key={index}>
-                      <TableCell component="th" scope="row">
-                        {val.date}
-                      </TableCell>
-                      <TableCell align="left">{val.deaths}</TableCell>
-                      <TableCell align="left">{val.deathsone}</TableCell>
-                      <TableCell align="left">{val.cases}</TableCell>
-                      <TableCell align="left">{val.casesone}</TableCell>
+                  {context.statedata.map((val) => (
+                    <TableRow key={val.date}>
+                      <TableCell component="th" scope="row">{val.date}</TableCell>
+                      <TableCell align="left">{val.deaths.toLocaleString()}</TableCell>
+                      <TableCell align="left">{val.deathsone.toLocaleString()}</TableCell>
+                      <TableCell align="left">{val.cases.toLocaleString()}</TableCell>
+                      <TableCell align="left">{val.casesone.toLocaleString()}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

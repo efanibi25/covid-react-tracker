@@ -9,7 +9,7 @@ import CardBody from "components/Card/CardBody.js";
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 //appbar
-import MenuBar from 'views/Components/MenuBar';
+import MenuBar from '../../components/Shared/Components/MenuBar.js';
 
 // Note: Removed the old makeStyles hook and the JSS style imports.
 

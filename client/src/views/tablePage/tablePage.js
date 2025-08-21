@@ -1,106 +1,59 @@
-import React , { useContext ,useState ,useEffect, Fragment}from "react";
-import Search from 'components/CovidTable/search.js';
+import React, { useContext, useEffect, Fragment } from "react";
+import PlacesSearch from 'components/Shared/PlaceSearch.js';
 import StateTable from 'components/CovidTable/stateTable.js';
 import CountyTable from 'components/CovidTable/countyTable.js';
-//appbar
-import MenuBar from "views/Components/MenuBar";
-//Card
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+import MenuBar from "components/Shared/Components/MenuBar";
+import { Box, Card, CardContent, Typography } from "@mui/material";
+import { DataContext } from "../../index.js";
+import { useJsApiLoader } from '@react-google-maps/api';
 
-// Note: The old `makeStyles` hook has been removed.
+document.body.style.background = "#ececec";
+function TablePage() {
 
-export const dataContext = React.createContext();
-document.body.style.background="#ececec"
-
-function App() {
-  const [address, setAddress] = useState({});
-  const [location, setLocation] = useState({});
-  const [show, setShow] = useState(null);
-  const [countydata, setCountyData] = useState([])
-  const [statedata, setStateData] = useState([])
-  const [county_pop, setCountyPop] = useState(null);
-  const [state_pop, setStatePop] = useState(null);
-  const [statevacc, setStateVacc] = useState([]);
-  const [countyvacc, setCountyVacc] = useState([]);
-
-
-  let shared={
-    address,setAddress,
-    location,setLocation,
-    setShow,
-    countydata,setCountyData,
-    statedata,setStateData,
-    county_pop,setCountyPop,
-    state_pop,setStatePop,
-    statevacc,setStateVacc,
-    countyvacc,setCountyVacc
-  }
+  let context = useContext(DataContext);
   
+
   useEffect(() => {
-    console.log(show,"this variable has changed")
-  },[show]);
-  
-  if(show==null){
-    return ( 
-      <Fragment>
-        <MenuBar/>
-        {/* The Box component below replaces the old div with classes.toolbar */}
-        <Box sx={(theme) => ({...theme.mixins.toolbar})} />
-        <dataContext.Provider value={shared}>  
-          <Search sx={{backgroundColor:"White", width:"80%", marginBottom:"5%"}}/>
-        </dataContext.Provider>
-        <Box display="flex" color="text.primary" flexDirection="row" justifyContent="center">
-          <Card 
-            sx={{
-              p:1,
-              width: "40%",
-              marginRight: "2%",
-              backgroundColor: "white"
-            }}
-          >
+    console.log(`Displaying: ${context.show}`);
+  }, [context.show]);
+
+  // Conditional return statement for the loading state
+  if (!context.isLoaded) {
+    return <div>Loading...</div>;
+  }
+
+  // The main JSX to be returned
+  return (
+    <Fragment>
+      <MenuBar />
+      <Box sx={{ mt: 8 }} />
+      
+      <PlacesSearch sx={{ backgroundColor: "White", width: "80%", margin: "auto", marginBottom: "2rem" }} />
+
+      {context.show === null && (
+        <Box display="flex" justifyContent="center">
+          <Card sx={{ p: 1, width: "40%", backgroundColor: "white" }}>
             <CardContent>
-              <h4 style={{fontFamily: "Roboto"}}>How to Use?</h4>
-              Search for a city by Name
-              <br></br>
-              <br></br>
-              This will Load Vaccine, Death, and Case Data for the county, that the city resides.
-              <br></br>
-              Afterwards, you can also view state Data by Click Switch to State
+              <Typography variant="h5" component="h4" style={{ fontFamily: "Roboto" }}>
+                How to Use?
+              </Typography>
+              <Typography variant="body1">
+                Search for a city by name.
+                <br /><br />
+                This will load vaccine, death, and case data for the county that the city resides in.
+                <br /><br />
+                Afterwards, you can also view state data by clicking "Switch to State".
+              </Typography>
             </CardContent>
           </Card>
         </Box>
-      </Fragment>
-    )
-  }
+      )}
 
-  if(show=="countyTable"){
-    return(
-      <Fragment>
-        <MenuBar/>
-        {/* The Box component below replaces the old div with classes.toolbar */}
-        <Box sx={(theme) => ({...theme.mixins.toolbar})} />
-        <dataContext.Provider value={shared}>    
-          <Search sx={{backgroundColor:"White", width:"80%", marginBottom:"5%"}}/>
-          <CountyTable/>
-        </dataContext.Provider>
-      </Fragment>
-    )
-  }
-
-  if(show=="stateTable"){
-    return(
-      <Fragment>
-        <MenuBar/>
-        {/* The Box component below replaces the old div with classes.toolbar */}
-        <Box sx={(theme) => ({...theme.mixins.toolbar})} />
-        <dataContext.Provider value={shared}>    
-          <Search sx={{backgroundColor:"White", width:"80%", marginBottom:"5%"}}/>
-          <StateTable/>
-        </dataContext.Provider>
-      </Fragment>
-    )
-  }
+      {context.show === "countyTable" && <CountyTable />}
+      {context.show === "stateTable" && <StateTable />}
+      
+    </Fragment>
+  );
 }
-export default App;
+
+export default TablePage;

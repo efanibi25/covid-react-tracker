@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const paths = require('./paths');
 
-// Make sure that including paths.js after env.js will read .env variables.
+// Make sure that including paths.js after this file is safe
 delete require.cache[require.resolve('./paths')];
 
 const NODE_ENV = process.env.NODE_ENV;
@@ -15,19 +15,19 @@ if (!NODE_ENV) {
 }
 
 // https://github.com/bkeepers/dotenv#what-other-env-files-can-i-use
-const dotenvFiles = [
+var dotenvFiles = [
   `${paths.dotenv}.${NODE_ENV}.local`,
   // Don't include `.env.local` for `test` environment
-  // since normally you expect tests to produce the same
-  // results for everyone
+  // because normally you expect tests to produce same results on CI and local machine
   NODE_ENV !== 'test' && `${paths.dotenv}.local`,
   `${paths.dotenv}.${NODE_ENV}`,
   paths.dotenv,
 ].filter(Boolean);
 
 // Load environment variables from .env* files. Suppress warnings using silent
-// if this file is missing. dotenv will never modify any environment variables
-// that have already been set.  Variable expansion is supported in .env files.
+// if this file is missing. dotenv will not modify any environment variables
+// that have already been set. For example, if you have `FOO=bar` in your .env file
+// and you run `FOO=baz npm start`, then `FOO` will be `baz` in your code.
 // https://github.com/motdotla/dotenv
 // https://github.com/motdotla/dotenv-expand
 dotenvFiles.forEach(dotenvFile => {
@@ -41,14 +41,14 @@ dotenvFiles.forEach(dotenvFile => {
 });
 
 // We support resolving modules according to `NODE_PATH`.
-// This lets you use absolute paths in imports inside large monorepos:
-// https://github.com/facebook/create-react-app/issues/253.
-// It works similar to `NODE_PATH` in Node itself:
-// https://nodejs.org/api/modules.html#modules_loading_from_the_global_folders
-// Note that unlike in Node, only *relative* paths from `NODE_PATH` are honored.
-// Otherwise, we risk importing Node.js core modules into an app instead of webpack shims.
-// https://github.com/facebook/create-react-app/issues/1023#issuecomment-265344421
-// We also resolve them to make sure all tools using them work consistently.
+// This lets you use absolute paths in imports inside large projects.
+// It works similar to `fallback` behavior in node module resolution:
+// https://github.com/facebookincubator/create-react-app/issues/253
+// https://nodejs.org/api/all.html#modules_loading_from_the_global_folders
+// Note that unlike in Node.js, these paths are not absolute. They are relative to
+// the current working directory (e.g. `src` or `node_modules`).
+// We temporarily add them to our BROWSER_PATH to allow importing things like
+// `config/env` or `config/paths`.
 const appDirectory = fs.realpathSync(process.cwd());
 process.env.NODE_PATH = (process.env.NODE_PATH || '')
   .split(path.delimiter)
@@ -57,7 +57,7 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')
   .join(path.delimiter);
 
 // Grab NODE_ENV and REACT_APP_* environment variables and prepare them to be
-// injected into the application via DefinePlugin in webpack configuration.
+// injected into the application via DefinePlugin in Webpack configuration.
 const REACT_APP = /^REACT_APP_/i;
 
 function getClientEnvironment(publicUrl) {
@@ -69,28 +69,18 @@ function getClientEnvironment(publicUrl) {
         return env;
       },
       {
-        // Useful for determining whether we’re running in production mode.
-        // Most importantly, it switches React into the correct mode.
+        // Useful for knowing whether we are in development, production or a test environment.
         NODE_ENV: process.env.NODE_ENV || 'development',
         // Useful for resolving the correct path to static assets in `public`.
-        // For example, <img src={process.env.PUBLIC_URL + '/img/logo.png'} />.
-        // This should only be used as an escape hatch. Normally you would put
-        // images into the `src` and `import` them in code to get their paths.
         PUBLIC_URL: publicUrl,
-        // We support configuring the sockjs pathname during development.
-        // These settings let a developer run multiple simultaneous projects.
-        // They are used as the connection `hostname`, `pathname` and `port`
-        // in webpackHotDevClient. They are used as the `sockHost`, `sockPath`
-        // and `sockPort` options in webpack-dev-server.
+        // We support configuring the socket host explicitly in development.
+        // https://github.com/facebook/create-react-app/issues/8636
         WDS_SOCKET_HOST: process.env.WDS_SOCKET_HOST,
         WDS_SOCKET_PATH: process.env.WDS_SOCKET_PATH,
         WDS_SOCKET_PORT: process.env.WDS_SOCKET_PORT,
-        // Whether or not react-refresh is enabled.
-        // It is defined here so it is available in the webpackHotDevClient.
-        FAST_REFRESH: process.env.FAST_REFRESH !== 'false',
       }
     );
-  // Stringify all values so we can feed into webpack DefinePlugin
+  // Stringify all values so we can feed into Webpack's DefinePlugin
   const stringified = {
     'process.env': Object.keys(raw).reduce((env, key) => {
       env[key] = JSON.stringify(raw[key]);
