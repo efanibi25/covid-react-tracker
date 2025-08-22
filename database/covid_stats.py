@@ -14,8 +14,12 @@ from helpers import run_command, should_download_file, ensure_dir_exists, safe_t
 from statemap import STATE_MAP, REVERSE_STATE_MAP
 
 # --- Configuration ---
-MONGO_URL = "mongodb://localhost:27017"
+MONGO_URL = os.getenv('MONGO_URI', 'mongodb://localhost:27017')
 DB_NAME = "covid"
+
+# Define a configurable root directory for all data files.
+# It will use the DATA_DIR from the environment, or default to the script's location.
+DATA_ROOT = os.getenv('DATA_DIR', os.path.dirname(os.path.abspath(__file__)))
 
 CENSUS_POP_URL = "https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/counties/totals/co-est2024-alldata.csv"
 CDC_WEEKLY_URL = "https://data.cdc.gov/resource/pwn4-m3yp.json"
@@ -30,8 +34,7 @@ USAFacts_FILES = {
 def pull_usafacts_data(mongo_client):
     """Downloads and transforms USAFacts CSVs into a nested time-series format."""
     print(f"[{datetime.now()}] Starting USAFacts data pull...")
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    data_dir = os.path.join(script_dir, "data", "usafacts")
+    data_dir = os.path.join(DATA_ROOT, "data", "usafacts")
     ensure_dir_exists(data_dir)
     db = mongo_client[DB_NAME]
 
@@ -94,8 +97,7 @@ def pull_usafacts_data(mongo_client):
 def pull_census_population_data(mongo_client):
     """Downloads and imports census population data, cleaning all string values."""
     print(f"[{datetime.now()}] Starting Census population data pull...")
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    data_dir = os.path.join(script_dir, "data", "census")
+    data_dir = os.path.join(DATA_ROOT, "data", "census")
     ensure_dir_exists(data_dir)
     
     filename = "co-est2024-alldata.csv"
@@ -145,8 +147,7 @@ def pull_census_population_data(mongo_client):
 def pull_cdc_weekly_data(mongo_client):
     """Fetches, cleans, and imports CDC weekly data, cleaning all string values."""
     print(f"[{datetime.now()}] Starting CDC weekly cases/deaths data pull...")
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    data_dir = os.path.join(script_dir, "data", "cdc_weekly")
+    data_dir = os.path.join(DATA_ROOT, "data", "cdc_weekly")
     ensure_dir_exists(data_dir)
     
     try:
@@ -223,8 +224,7 @@ def pull_cdc_weekly_data(mongo_client):
 def pull_cdc_vaccine_data(mongo_client):
     """Fetches CDC vaccine data and inserts new records, cleaning all string values."""
     print(f"[{datetime.now()}] Starting CDC vaccine data pull...")
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    data_dir = os.path.join(script_dir, "data", "cdc_vaccine")
+    data_dir = os.path.join(DATA_ROOT, "data", "cdc_vaccine")
     ensure_dir_exists(data_dir)
     
     try:

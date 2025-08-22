@@ -6,7 +6,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "PORT=5200 node scripts/start.js",
-    "build": "node scripts/build.js && gulp licenses",
+    "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "lint:check": "eslint . --ext=js,jsx;  exit 0",
     "lint:fix": "eslint . --ext=js,jsx --fix;  exit 0",
@@ -91,6 +91,7 @@
     "@mui/icons-material": "^7.1.0",
     "@mui/lab": "^7.0.0-beta.12",
     "@mui/material": "^7.1.0",
+    "@react-google-maps/api": "^2.20.7",
     "@svgr/webpack": "^8.1.0",
     "@types/googlemaps": "^3.43.3",
     "@types/markerclustererplus": "^2.1.33",

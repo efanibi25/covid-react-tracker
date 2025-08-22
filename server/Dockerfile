@@ -14,8 +14,8 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Expose the port your server runs on (e.g., 5000)
-EXPOSE 5000
+# Expose the port your server runs on (e.g., 5400)
+EXPOSE 5400
 
 # Command to start the server
 CMD ["npm", "start"]
